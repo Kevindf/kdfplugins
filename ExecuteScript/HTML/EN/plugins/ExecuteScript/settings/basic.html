@@ -1,0 +1,24 @@
+[% PROCESS settings/header.html %]
+[% IF prefs %]
+	<div class="settingSection">
+		<div class="groupHead">[% "PLUGIN_EXECUTE_SCRIPT" | string | upper %]</div>
+		<div class="groupDesc">[% "PLUGIN_GROUP_EXECUTE_DESC" | string %]</div>
+	</div>
+	
+	[% FOREACH thispref = prefs %]
+		<div class="settingSection">
+			[% head = thispref.key; desc = thispref.key _ "_DESC" %]
+			<div class="prefHead">[% "SETUP_PLUGIN-EXECUTE-$head" | string | upper %]</div>
+			<div class="prefDesc">[% "SETUP_PLUGIN-EXECUTE-$desc" | string %]</div>
+			
+			<select class="stdedit" name="[% thispref.key %]" id="[% thispref.key %]">
+	
+			[% FOREACH option = scriptOptions %]
+				<option [% IF thispref.value == option.key %]selected [% END %]value="[% option.key %]">[% option.value %]</option>
+			[%- END -%]
+			
+			</select>
+		</div>
+	[% END %]
+[% END %]
+[% PROCESS settings/footer.html %]

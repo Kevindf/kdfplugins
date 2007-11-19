@@ -1,0 +1,18 @@
+<?xml version='1.0' standalone='yes'?>
+<extension>
+  <name>PLUGIN_BOOKMARK</name>
+  <creator>Kevin Deane-Freeman</creator>
+  <defaultState>enabled</defaultState>
+  <description>PLUGIN_BOOKMARK</description>
+  <email>kevindf_at_shaw.ca</email>
+  <homepageURL>http://www.deane-freeman.com/slimserver/</homepageURL>
+  <id>fc736967-f5bc-40cf-b5d7-6becdd0a6863</id>
+  <module>Plugins::Bookmark::Plugin</module>
+  <targetApplication>
+    <id>SlimServer</id>
+    <maxVersion>7.0+</maxVersion>
+    <minVersion>7.0a</minVersion>
+  </targetApplication>
+  <type>2</type>
+  <version>2.0</version>
+</extension>

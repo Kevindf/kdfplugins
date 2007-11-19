@@ -1,0 +1,208 @@
+# String file for Alarm plugin
+
+# $Id: strings.txt,v 1.1 2007-11-07 07:33:21 fishbone Exp $
+
+PLUGIN_ALARM_GROUP_DESC
+	DE	Dieser Player kann beliebig viele Wecker haben: klicken Sie einfach "Hinzufügen" oder "Letzten entfernen". Sie können den Wecker auch über X Sekunden einblenden oder eine Wiedergabelieste zufällig abspielen lassen. 
+	EN	This player can have as many alarms as you like: simply click add or delete below to add new alarms. You may also choose to have the alarm fade in over x seconds or have the selected playlist auto-shuffled.
+
+PLUGIN_ALARM
+	DE	Erweiterter Wecker
+	EN	Extended Alarm
+	FR	Reviel
+
+PLUGIN_ALARM_DESC
+	EN	Extended Alarm for SlimServer with multiple alarms, timing options and a snooze function.
+
+PLUGIN_SCREENSAVER_ALARM
+	DE	Wecker Bildschirmschoner
+	EN	Alarm Screensaver
+	FR	Ecran de veille Lecture
+
+PLUGIN_ALARM_WAKE
+	EN	Wake
+
+PLUGIN_ALARM_NAME
+	DE	Wecker Name
+	EN	Alarm Name
+	FR	Nom de Lecture
+
+PLUGIN_ALARM_NOW_PLAYING
+	DE	Der Wecker spielt gerade
+	EN	Alarm Playing
+	FR	Lecture (réveil)
+
+PLUGIN_ALARM_DAYS
+	DE	Tage für Wecker wählen
+	EN	Choose Days for Alarm
+	FR	Choisir les jours pour le réveil
+
+PLUGIN_ALARM_DAYS_ALL
+	DE	Jeden Tag
+	EN	All 7 Days
+	FR	Tous les jours
+
+PLUGIN_ALARM_DAYS_1
+	DE	Montag
+	EN	Monday
+	FR	Lundi
+
+PLUGIN_ALARM_DAYS_2
+	DE	Dienstag
+	EN	Tuesday
+	FR	Mardi
+
+PLUGIN_ALARM_DAYS_3
+	DE	Mittwoch
+	EN	Wednesday
+	FR	Mercredi
+
+PLUGIN_ALARM_DAYS_4
+	DE	Donnerstag
+	EN	Thursday
+	FR	Jeudi
+
+PLUGIN_ALARM_DAYS_5
+	DE	Freitag
+	EN	Friday
+	FR	Vendredi
+
+PLUGIN_ALARM_DAYS_6
+	DE	Samstag
+	EN	Saturday
+	FR	Samedi
+
+PLUGIN_ALARM_DAYS_7
+	DE	Sonntag
+	EN	Sunday
+	FR	Dimanche
+
+PLUGIN_ALARM_DAYS_ONCE
+	DE	Nur ein Mal
+	EN	One Time Only
+	FR	Une fois seulement
+
+PLUGIN_ALARM_DAYS_WEEK
+	DE	Nur wochentags
+	EN	Weekdays Only
+	FR	Jours de semaine
+
+PLUGIN_ALARM_DAYS_END
+	DE	Nur an Wochenenden
+	EN	Weekends Only
+	FR	Week-end
+
+PLUGIN_ALARM_SNOOZE
+	DE	Schlummern...
+	EN	Snoozing...
+	FR	Sommeiller...
+
+PLUGIN_ALARM_WAKEUP
+	DE	Zeit, aufzustehen...
+	EN	Time to wake up...
+	FR	C'est le temps de se lever...
+
+PLUGIN_ALARM_CURRENT_PLAYLIST
+	DE	(die aktuelle)
+	EN	(current)
+	FR	(actuelle)
+
+PLUGIN_ALARM_SETTING_PLAYLIST
+	DE	Benutze Playlist...
+	EN	Setting Playlist to...
+
+PLUGIN_ALARM_DURATION
+	DE	Dauer des Weckers (Minuten)
+	EN	Alarm Duration (minutes)
+	FR	Dureé'alarme (en minutes)
+	
+PLUGIN_ALARM_NOEND
+	DE	Manuell
+	EN	Manual
+	FR	Manuel
+
+PLUGIN_ALARM_DAYS_DATE
+	DE	Exaktes Datum
+	EN	Exact Date
+	FR	Jour spéfique
+
+PLUGIN_ALARM_DAYOFMONTH
+	DE	Tag des Monats
+	EN	Day of month
+	FR	Jour de mois
+
+PLUGIN_ALARM_MONTH
+	DE	Monat
+	EN	Month
+	FR	Mois
+
+PLUGIN_ALARM_MONTH_0
+	DE	Januar
+	EN	January
+	FR	Janvier
+
+PLUGIN_ALARM_MONTH_1
+	DE	Februar
+	EN	February
+	FR	Février
+
+PLUGIN_ALARM_MONTH_2
+	DE	März
+	EN	March
+	FR	Mars
+
+PLUGIN_ALARM_MONTH_3
+	EN	April
+	FR	Avril
+
+PLUGIN_ALARM_MONTH_4
+	DE	Mai
+	EN	May
+	FR	Mai
+
+PLUGIN_ALARM_MONTH_5
+	DE	Juni
+	EN	June
+	FR	Juin
+
+PLUGIN_ALARM_MONTH_6
+	DE	Juli
+	EN	July
+	FR	Juillet
+
+PLUGIN_ALARM_MONTH_7
+	EN	August
+	FR	Août
+	
+PLUGIN_ALARM_MONTH_8
+	EN	September
+	FR	Septembre
+
+PLUGIN_ALARM_MONTH_9
+	DE	Oktober
+	EN	October
+	FR	Octobre
+
+PLUGIN_ALARM_MONTH_10
+	EN	November
+	FR	Novembre
+
+PLUGIN_ALARM_MONTH_11
+	DE	Dezember
+	EN	December
+	FR	Décembre
+
+PLUGIN_ALARM_AUTOSHUFFLE
+	DE	Wiedergabeliste zufällig mischen
+	EN	Auto shuffle playlist
+
+PLUGIN_ALARM_FADESECONDS
+	DE	Einblende-Dauer (Sekunden)
+	EN	Fade-in seconds
+
+PLUGIN_ALARM_SHOWCLOCK
+	EN	Show time on Screen 2
+
+PLUGIN_ALARM_DELETE_LAST
+	DE	Letzten entfernen
+	EN	Delete last

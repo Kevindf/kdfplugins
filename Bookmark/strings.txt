@@ -1,0 +1,27 @@
+﻿PLUGIN_BOOKMARK
+	EN	Bookmarks v2
+	DE	Lesezeichen v2
+
+PLUGIN_BOOKMARK_SAVE
+	EN	Press PLAY or # to save
+	DE	Drücke PLAY oder # zum Speichern
+
+PLUGIN_BOOKMARK_RESTORING
+	EN	Restoring to bookmark...
+	DE	Lade Lesezeichen...
+
+PLUGIN_BOOKMARK_SAVING
+	EN	Saving Bookmark now...
+	DE	Speichere Lesezeichen...
+	
+PLUGIN_BOOKMARK_RESTORE
+	EN	Press PLAY or # to restore
+	DE	Drücke PLAY oder # zum Laden
+
+PLUGIN_BOOKMARK_ERROR
+	EN	Error Loading: not found!
+	EN	Fehler beim Laden: Nicht gefunden!
+
+PLUGIN_BOOKMARK_ERASE
+	EN	Erasing Bookmark...
+	DE	Lösche Lesezeichen...
