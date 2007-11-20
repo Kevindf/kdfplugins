@@ -604,7 +604,7 @@ sub fill24HScheduler {
 				#$log->debug($wday." ".$alarmdays." ".$week{$wday}{$alarmdays});
 				if ($time && $week{$wday}{$alarmdays} && $time > $currenttime) {
 					$schedule{$client}{$time} = $alarmID;
-					$log->debug("Found alarm $alarmID for %s at ".$client->name, $time);
+					$log->debug("Found alarm $alarmID for ".$client->name." at $time");
 				
 				#tomorrow's alarms
 				} elsif($time && $week{$tomorrow}{$alarmdays} && $time < $currenttime) {
@@ -778,8 +778,6 @@ sub setAlarmActiveMode {
 	if ($prefs->client($client)->get('showclock.'.$client->modeParam('alarmID')) && $client->display->isa('Slim::Display::Transporter')) {
 		$oldVisualizer{$client} = $client->modeParam('visu');
 	}
-
-
 };
 
 sub leaveAlarmActiveMode {
@@ -789,13 +787,11 @@ sub leaveAlarmActiveMode {
 	$client->update({'screen2' => {}});
 }
 
-
-
 sub alarmActiveLines {
 	my $client = shift;
 	
 	my $parts;
-	
+
 	Slim::Hardware::IR::setLastIRTime(
 		$client,
 		Time::HiRes::time() + (preferences('server')->client($client)->get("screensavertimeout") * 5),
