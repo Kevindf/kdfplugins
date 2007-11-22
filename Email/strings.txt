@@ -1,0 +1,68 @@
+PLUGIN_EMAIL_BROWSER
+	DE	POP3 eMail Browser
+	EN	POP3 email browser
+
+PLUGIN_EMAIL_DESC
+	EN	Plugin for player UI access to a POP3 Email Account and notification of new emails.
+
+PLUGIN_EMAIL_NO_CONNECT
+	DE	Konnte zu keinem POP3 Server verbinden.
+	EN	Could not connect to any POP3 servers.
+
+PLUGIN_EMAIL_CONNECT
+	DE	Verbinde zu POP3 Server...
+	EN	Connecting to POP3 servers
+
+PLUGIN_EMAIL_NO_MESSAGES
+	DE	Keine Nachrichten
+	EN	No Messages
+
+PLUGIN_EMAIL_RETRY
+	DE	Drücke Rec für erneuten Versuch.
+	EN	Press Rec to retry.
+
+PLUGIN_EMAIL_WAIT
+	DE	Bitte warten...
+	EN	Please Wait...
+
+PLUGIN_EMAIL_UHAVE
+	DE	Sie haben
+	EN	You Have
+
+PLUGIN_EMAIL_MESSAGES
+	DE	Nachrichten
+	EN	Messages
+
+PLUGIN_EMAIL_NEW
+	DE	*neue*
+	EN	*NEW* 
+
+SETUP_PLUGIN-EMAIL-AUDIO
+	DE	Hörbare Benachrichtigung bei Mail-Eingang
+	EN	Audible Email Alerts
+
+SETUP_GROUP_PLUGIN_EMAIL_DESC
+	DE	Ermöglicht das Checken von POP3 Mail und Lesen der Titelzeilen.
+	EN	Check Pop3 Email and browse headers.
+
+PLUGIN_EMAIL_PASSWORD_CHANGED
+	DE	Ermöglicht das Checken von POP3 Mail und Lesen der Titelzeilen.
+	EN	Email password changed
+
+SETUP_PLUGIN-EMAIL-CHECKWHEN
+	DE	eMail Überprüf-Intervall
+	EN	Minutes between email checks
+
+SETUP_PLUGIN-EMAIL-DISPLAY
+	DE	Länge der Benachrichtigung
+	EN	Message Alert length
+
+SETUP_PLUGIN-EMAIL-SERVERS
+	EN	POP3 server name
+
+SETUP_PLUGIN-EMAIL-USERS
+	EN	Username
+	
+SETUP_PLUGIN-EMAIL-PASSWORDS
+	EN	Password
+	

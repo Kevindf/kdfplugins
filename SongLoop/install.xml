@@ -1,0 +1,18 @@
+<?xml version='1.0' standalone='yes'?>
+<extension>
+  <name>PLUGIN_SONGLOOP</name>
+  <creator>Kevin Deane-Freeman</creator>
+  <defaultState>enabled</defaultState>
+  <description>PLUGIN_SONGLOOP_DESC</description>
+  <email>kevindf_at_shaw.ca</email>
+  <homepageURL>http://www.deane-freeman.com/slimserver/</homepageURL>
+  <id>aa0d5af6-ee53-43a0-8bf9-e11f79956410</id>
+  <module>Plugins::Songloop::Plugin</module>
+  <targetApplication>
+    <id>SlimServer</id>
+    <maxVersion>7.0+</maxVersion>
+    <minVersion>7.0a</minVersion>
+  </targetApplication>
+  <type>2</type>
+  <version>2.0</version>
+</extension>

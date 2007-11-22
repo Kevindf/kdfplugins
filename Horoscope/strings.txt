@@ -1,0 +1,12 @@
+# String file for Horoscope plugin
+
+# $Id: strings.txt,v 1.1 2007-11-07 07:45:51 fishbone Exp $
+
+PLUGIN_HOROSCOPE_MODULE_NAME
+	EN	Daily Horoscope
+
+PLUGIN_HOROSCOPE_UPDATING
+	EN	updating...
+
+PLUGIN_HOROSCOPE_NONE
+	EN	Not Available at this time.  Press ADD to retry
