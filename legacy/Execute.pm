@@ -22,7 +22,7 @@ use FindBin qw($Bin);
 use Slim::Utils::Misc;
 
 use vars qw($VERSION);
-$VERSION = substr(q$Revision: 1.17 $,10);
+$VERSION = substr(q$Revision: 1.19 $,10);
 
 my $interval = 1; # check every x seconds
 my @browseMenuChoices;
@@ -264,11 +264,6 @@ sub checkDefaults {
 	}
 }
 
-#sub hookExecute {
-#	print "Execute Hook Started\n";
-#	Slim::Control::Command::setExecuteCallback(\&Plugins::Execute::commandCallback);
-#}
-
 sub scriptlist {
 
 	my %scriptList = ();
@@ -324,8 +319,7 @@ sub commandCallbackPlay {
 	}
 	
 	$::d_plugins && msg("Execute: Playback Started\n");
-	use Data::Dump;
-	Data::Dump::dump($request);
+	
 	my $scriptPath = scriptPath();
 	my $runScript = $client->prefGet('script',1);
 	if ((!defined($runScript)) || ($runScript eq '')) {

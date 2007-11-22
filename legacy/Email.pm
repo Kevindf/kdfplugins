@@ -1,4 +1,4 @@
-# $Id: Email.pm,v 1.41 2006-06-04 21:12:26 fishbone Exp $
+# $Id: Email.pm,v 1.45 2006-12-12 02:43:18 fishbone Exp $
 # Email.pm by Andrew Hedges (andrew@hedges.me.uk) October 2002
 # Updated by Kevin Deane-Freeman (kevin@deane-freeman.com) May 2003
 #
@@ -10,12 +10,13 @@
 # version 2.
 
 package Plugins::Email;
-sub getDisplayName { return $::VERSION =~ m/6\./ ? 'PLUGIN_EMAIL_BROWSER' : string('PLUGIN_EMAIL_BROWSER')}
+
+sub getDisplayName { return 'PLUGIN_EMAIL_BROWSER';}
 
 use Slim::Utils::Strings qw (string);
 
 use vars qw($VERSION);
-$VERSION = substr(q$Revision: 1.41 $,10);
+$VERSION = substr(q$Revision: 1.45 $,10);
 
 sub strings() { return '
 PLUGIN_EMAIL_BROWSER
@@ -179,7 +180,7 @@ sub getMessage {
   }
   $bodyLine = 0;
   if (Slim::Buttons::Common::mode($client) eq 'block') {
-  		Slim::Buttons::Block::unblock($client);
+  		$client->unblock();
   	};
 }
 
@@ -197,7 +198,7 @@ sub doFetch {
   $numMails = 0;
   @messageStrings = ();
 	if (Slim::Buttons::Common::mode($client) eq 'PLUGIN.Email') {
-		Slim::Buttons::Block::block($client,string('PLUGIN_EMAIL_CONNECT'),string('PLUGIN_EMAIL_WAIT'));
+		$client->block(string('PLUGIN_EMAIL_CONNECT'),string('PLUGIN_EMAIL_WAIT'));
 	};
   foreach my $serverName (@serverNames) {
     my $pop3 = Net::POP3->new($serverName, Debug => 0);
@@ -227,7 +228,7 @@ sub doFetch {
   }
   $linePos = 0;
   if (Slim::Buttons::Common::mode($client) eq 'block') {
-  		Slim::Buttons::Block::unblock($client);
+  		$client->unblock($client);
   	};
 }
 
@@ -242,27 +243,43 @@ sub checkEmail {
 		my $line2 = string('PLUGIN_EMAIL_NEW').$messageStrings[($numMails-1)*2+1];
 		my $time =  Slim::Utils::Prefs::get('plugin-Email-display');
 		if (!defined($time)) {$time = 10;};
-		Slim::Display::Animation::showBriefly($client,$line1, $line2,$time);
+
+		$client->showBriefly({
+			'line'     => [$line1, $line2],
+			'duration' => $time,
+			'block'    => 1,
+		});
+
 		if (Slim::Utils::Prefs::get('plugin-Email-audio') && (Slim::Buttons::Common::mode($client) ne "off")) {
+			my $ds    = 'Slim::Schema';
+			my $track = $ds->objectForUrl({
+				'url'      => $mailAlert,
+				'readTags' => 1,
+				'create'   => 1,
+			});
+			my $alerttime = $track->durationSeconds();
+			
 			#Audible Announce Option
-			Slim::Control::Command::execute($client, ["playlist", "insert", $mailAlert]);
+			$client->execute(["playlist", "insert", $mailAlert]);
 			#Get remaining time of current song, plus duration of alert
 			my $offset = Slim::Player::Source::songTime($client);
 			my $index = Slim::Player::Source::currentSongIndex($client);
 			my $mode = $client->playmode;
-			my $ds    = Slim::Music::Info::getCurrentDataStore();
-			my $track = $ds->objectForUrl($mailAlert);
-			my $alerttime = $track->durationSeconds();
-			Slim::Control::Command::execute($client, ["playlist","jump","+1"]);
+			
+			$client->execute(["playlist","jump","+1"]);
 			#set timer to remove the item after the total time
 			$::d_plugins && Slim::Utils::Misc::msg("Playing alert of duration: $alerttime\n");
 			Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + $alerttime+1, \&killAlert, $index, $offset,$mode);
 		} else {
 			my $line1 = string('PLUGIN_EMAIL_UHAVE')." ".$numMails." ".string('PLUGIN_EMAIL_MESSAGES');
-    		my $line2 = string('PLUGIN_EMAIL_NEW').$messageStrings[($numMails-1)*2+1];
-    		my $time =  Slim::Utils::Prefs::get('plugin-Email-display');
-    		if (!defined($time)) {$time = 10;};
-			Slim::Display::Animation::showBriefly($client,$line1, $line2,$time);
+			my $line2 = string('PLUGIN_EMAIL_NEW').$messageStrings[($numMails-1)*2+1];
+			my $time =  Slim::Utils::Prefs::get('plugin-Email-display');
+			if (!defined($time)) {$time = 10;};
+			$client->showBriefly({
+				'line'     => [$line1, $line2],
+				'duration' => $time,
+				'block'    => 1,
+			});
 		}
 	}
 	$last = $numMails;
@@ -280,14 +297,14 @@ sub killAlert {
 	my $mode = shift;
 	Slim::Player::Source::playmode($client, "stop");
 	#Slim::Control::Command::execute($client, ["playlist", "deleteitem", $mailAlert]);
-	$::d_plugins && Slim::Utils::Misc::msg("Clearling alert file: $mailAlert\n");
+	$::d_plugins && Slim::Utils::Misc::msg("Clearing alert file: $mailAlert\n");
 	if ($mode eq 'play') {
 		Slim::Player::Source::jumpto($client, $index);
 		Slim::Player::Source::gototime($client, $offset, 1);
 	} else {
 		Slim::Player::Source::playmode($client, $mode);
 	}
-	Slim::Control::Command::execute($client, ["playlist", "deleteitem", $mailAlert]);
+	$client->execute(["playlist", "deleteitem", $mailAlert]);
 }
 
 sub addToList {
@@ -358,7 +375,7 @@ my %functions = (
 	   if (($numMails > 0) && (scalar(@messageBody==0))) {
 			getMessage($client,$linePos+1);
 		} else {
-			Slim::Display::Animation::bumpRight($client);
+			$client->bumpRight();
 		}
 	},
 	'add' => sub  {
@@ -366,7 +383,9 @@ my %functions = (
 	   my $line1 = string('PLUGIN_EMAIL_CONNECT');
     	my $line2 = string('PLUGIN_EMAIL_WAIT');
     		$last = 0;
-    	Slim::Display::Animation::showBriefly($client,$line1, $line2);
+			$client->showBriefly({
+				'line'     => [$line1, $line2],
+			});
 	   #doFetch($client);
 	   checkEmail($client);
 	   $client->update();

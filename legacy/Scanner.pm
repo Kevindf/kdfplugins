@@ -1,6 +1,6 @@
 package Plugins::Scanner;
 
-# $Id: Scanner.pm,v 1.5 2006-04-29 09:05:53 fishbone Exp $
+# $Id: Scanner.pm,v 1.8 2007-10-24 03:02:03 fishbone Exp $
 # by Kevin Deane-Freeman August 2004
 
 # This code is derived from code with the following copyright message:
@@ -15,14 +15,14 @@ use strict;
 ### Section 1. Change these as required ###
 ###########################################
 
-use Slim::Control::Command;
 use Slim::Utils::Strings qw (string);
 use File::Spec::Functions qw(:ALL);
 
 use vars qw($VERSION);
-$VERSION = substr(q$Revision: 1.5 $,10);
+$VERSION = substr(q$Revision: 1.8 $,10);
 
-my $offset=0;
+my $offset    = 0;
+my $jumptomode = 0;
 
 sub getDisplayName {return 'PLUGIN_SCANNER'}
 
@@ -86,17 +86,26 @@ my %functions = (
 	'right' => sub  {
 		my ($client,$funct,$functarg) = @_;
 		scannerExitHandler($client,'RIGHT');
-	}
-	,'left' => sub {
+	},
+	'left' => sub {
 		my $client = shift;
 		scannerExitHandler($client,'LEFT');
-	}
-	,'play' => sub {
+	},
+	'play' => sub {
 		my $client = shift;
 		Slim::Player::Source::playmode($client,"play");
 		Slim::Player::Source::gototime($client, $offset, 1);
 		$client->showBriefly($client->currentSongLines());
-	}
+		if ($jumptomode) {
+			Slim::Buttons::Common::popMode($client);
+			$jumptomode = 0;
+		}
+	},
+	'jumptoscanner' => sub {
+		my $client = shift;
+		Slim::Buttons::Common::pushModeLeft( $client, 'PLUGIN.Scanner');
+		$jumptomode = 1;
+	},
 );
 
 sub getFunctions {
@@ -106,7 +115,8 @@ sub getFunctions {
 sub lines {
 	my $line1 = string('PLUGIN_SCANNER');
 	my $line2 = '';
-	return ($line1,$line2);
+	
+	return {'line'    => [$line1, $line2],}
 }
 
 sub setMode {
