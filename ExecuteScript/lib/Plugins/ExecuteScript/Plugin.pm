@@ -124,7 +124,7 @@ sub initPlugin {
 		},
 		'play' => sub {
 			my $client = shift;
-			if (my $runScript = catfile(scriptPath(),${$client->param('valueRef')})) {
+			if (my $runScript = catfile(scriptPath(),${$client->modeParam('valueRef')})) {
 				$log->info("Execute: path: ".scriptPath());
 				$log->info("Execute: file: ".$runScript);
 				$log->info("Execute: Executing: ".$runScript);
