@@ -104,7 +104,6 @@ sub handler {
 		month
 		dayofmonth
 		playlist
-		autoshuffle
 		fadeseconds
 	);
 	
@@ -164,6 +163,7 @@ sub handler {
 			}
 			
 			$prefs->client($client)->set('active.'.$alarmID, $paramRef->{'active'.$count} eq 'on' ? 1: 0);
+			$prefs->client($client)->set('autoshuffle.'.$alarmID, $paramRef->{'autoshuffle'.$count} eq 'on' ? 1: 0);
 		}
 		Plugins::ExtendedAlarm::Plugin::resetSchedule($client);
 	}
