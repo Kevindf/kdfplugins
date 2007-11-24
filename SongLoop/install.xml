@@ -7,7 +7,7 @@
   <email>kevindf_at_shaw.ca</email>
   <homepageURL>http://www.deane-freeman.com/slimserver/</homepageURL>
   <id>aa0d5af6-ee53-43a0-8bf9-e11f79956410</id>
-  <module>Plugins::Songloop::Plugin</module>
+  <module>Plugins::SongLoop::Plugin</module>
   <targetApplication>
     <id>SlimServer</id>
     <maxVersion>7.0+</maxVersion>
