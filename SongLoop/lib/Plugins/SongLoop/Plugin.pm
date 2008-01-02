@@ -11,6 +11,10 @@ package Plugins::SongLoop::Plugin;
 # version 2.
 use strict;
 
+use Slim::Utils::Prefs;
+
+use base qw(Slim::Plugin::Base);
+
 ###########################################
 ### Section 1. Change these as required ###
 ###########################################
@@ -30,13 +34,21 @@ sub getDisplayName {return 'PLUGIN_SONGLOOP'};
 ### Section 2. Your variables and code go here ###
 ##################################################
 
+my $log          = Slim::Utils::Log->addLogCategory({
+	'category'     => 'plugin.songloop',
+	'defaultLevel' => 'WARN',
+	'description'  => getDisplayName(),
+});
+
+my $prefs = preferences('plugin.songloop');
+
 my %current;
 
 my %menuParams = (
 	'songloop' => {
 				'header' => sub {
 					my $client = shift;
-					if ($client->prefGet('songloopStartTime')) {
+					if ($prefs->client($client)->get('songloopStartTime')) {
 						return 'PLUGIN_SONGLOOP_SET_END';
 					} else {
 						return 'PLUGIN_SONGLOOP_SET_START';
@@ -68,6 +80,7 @@ my %menuParams = (
 sub scannerExitHandler {
 	my ($client,$exittype) = @_;
 	$exittype = uc($exittype);
+
 	if ($exittype eq 'LEFT') {
 		Slim::Buttons::Common::popModeRight($client);
 		#Slim::Player::Source::gototime($client, $offset, 1);
@@ -90,13 +103,13 @@ sub setTimer {
 sub checkLoop {
 	my $client = shift;
 	
-	unless ($client->prefGet('songloopStartTime') && $client->prefGet('songloopEndTime')) {
+	unless ($prefs->client($client)->get('songloopStartTime') && $prefs->client($client)->get('songloopEndTime')) {
 		Slim::Utils::Timers::killTimers($client, \&checkLoop);
 		return;
 	}
 	
-	if (Slim::Player::Source::songTime($client) >= $client->prefGet('songloopEndTime')) {
-		Slim::Player::Source::gototime($client, $client->prefGet('songloopStartTime'), 1);
+	if (Slim::Player::Source::songTime($client) >= $prefs->client($client)->get('songloopEndTime')) {
+		Slim::Player::Source::gototime($client, $prefs->client($client)->get('songloopStartTime'), 1);
 		
 	}
 	setTimer($client);
@@ -114,13 +127,13 @@ my %functions = (
 	'play' => sub {
 		my $client = shift;
 		
-		if ($client->prefGet('songloopStartTime')) {
-			$client->prefSet('songloopEndTime',$offset);
+		if ($prefs->client($client)->get('songloopStartTime')) {
+			$prefs->client($client)->set('songloopEndTime',$offset);
 			Slim::Player::Source::playmode($client,"play");
-			Slim::Player::Source::gototime($client,$client->prefGet('songloopStartTime'), 1);
+			Slim::Player::Source::gototime($client,$prefs->client($client)->get('songloopStartTime'), 1);
 			setTimer($client);
 		} else {
-			$client->prefSet('songloopStartTime',$offset);
+			$prefs->client($client)->set('songloopStartTime',$offset);
 		}
 		$client->update();
 	},
@@ -138,19 +151,31 @@ sub lines {
 }
 
 sub setMode {
+	my $class  = shift;
 	my $client = shift;
 	my $method = shift;
+	
 	if ($method eq 'pop') {
 		Slim::Buttons::Common::popModeRight($client);
 		return;
 	}
+	
 	#$client->lines(\&lines);
-	$client->prefDelete('songloopStartTime');
-	$client->prefDelete('songloopEndTime');
+	$prefs->client($client)->remove('songloopStartTime');
+	$prefs->client($client)->remove('songloopEndTime');
+	
 	my %params = %{$menuParams{'songloop'}};
+	
 	$params{'max'} = Slim::Player::Source::playingSongDuration($client) || 100;
 	$params{'increment'} = $params{'max'}/100;
+	
 	$offset = Slim::Player::Source::songTime($client);
+	
 	Slim::Buttons::Common::pushMode($client,'INPUT.Bar',\%params);
 	$client->update();
+}
+
+sub initPlugin {
+	my $class = shift;
+	$class->SUPER::initPlugin();
 }
