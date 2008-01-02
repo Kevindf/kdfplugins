@@ -16,6 +16,7 @@ package Plugins::Scanner::Plugin;
 use strict;
 
 use Slim::Utils::Prefs;
+
 use base qw(Slim::Plugin::Base);
 
 ###########################################
@@ -41,7 +42,6 @@ my $log          = Slim::Utils::Log->addLogCategory({
 	'defaultLevel' => 'WARN',
 	'description'  => getDisplayName(),
 });
-
 
 my %current;
 my $jumptomode;
