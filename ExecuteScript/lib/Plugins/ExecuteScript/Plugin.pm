@@ -59,13 +59,15 @@ sub getDisplayName { 'PLUGIN_EXECUTE_SCRIPT'; }
 sub setMode {
 	my $class = shift;
 	my $client = shift;
-	
+
 	if (!defined($menuSelection{$client})) { $menuSelection{$client} = 0; };
 	$client->lines(\&lines);
 }
 
 sub initPlugin {
 	my $class = shift;
+	
+	my $prefs = preferences('plugin.executescript');
 	
 	@browseMenuChoices = qw(
 		PLUGIN_EXECUTE_OPEN
@@ -98,29 +100,44 @@ sub initPlugin {
 		'right' => sub  {
 			my $client = shift;
 #			my @oldlines = Slim::Display::Display::curLines($client);
-
-			my $value;
-			if (my $scripts = $prefs->client($client)->get('script')) {
-				$value = $scripts ->[$menuSelection{$client}];
-			}
-			my %scripts = scriptlist();
-			#print Data::Dumper::Dumper(keys %scripts);
+			my $selection = $menuSelection{$client};
+			
 			my %params = (
-				'listRef'        => ['(server)',keys %scripts],
-				'header'         => $client->string('PLUGIN_SELECT_SCRIPT'),
-				'onChange'       => sub {
-					my $client = shift;
-					my $scripts = $prefs->client($client)->get('script');
-					$scripts->[ $menuSelection{$client} ] = $_[1] eq '(server)' ? '' : $_[1];
-					$prefs->client($client)->set('script', $scripts);
+				'name'           => sub {return $_[1] },
+				'header'         => '{PLUGIN_SELECT_SCRIPT} {count}',
+				'pref'           => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)' },
+				'onRight'        => sub { 
+							my ( $client, $item ) = @_;
+							
+							my $scripts = $prefs->client($client)->get('script');
+							$scripts->[ $selection ] = $item eq '(server)' ? '' : $item ;
+							$prefs->client($client)->set('script', $scripts);
+							$client->update();
 				},
-				'onChangeArgs'   => 'CV',
-				'scriptnum'      => $menuSelection{$client},
-				'valueRef'       => \$value,
+				'onAdd'          => sub { 
+							my ( $client, $item ) = @_;
+							
+							my $scripts = $prefs->client($client)->get('script');
+							$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
+							$prefs->client($client)->set('script', $scripts);
+							$client->update();
+				},
+				'onPlay'         => sub { 
+							my ( $client, $item ) = @_;
+							
+							my $scripts = $prefs->client($client)->get('script');
+							$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
+							$prefs->client($client)->set('script', $scripts);
+							$client->update();
+				},
+				'valueRef'       => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
+				'initialValue'   => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
 			);
-			Slim::Buttons::Common::pushModeLeft($client, 'INPUT.List',\%params);
 
-			#Slim::Buttons::Common::pushModeLeft($client, 'selectscripts');
+			my %scripts = scriptlist();
+			$params{'listRef'} = ['(server)',keys %scripts];
+			
+			Slim::Buttons::Common::pushModeLeft($client, 'INPUT.Choice',\%params);
 		},
 		'play' => sub {
 			my $client = shift;
@@ -198,7 +215,7 @@ sub commandCallbackStop {
 	}
 	if ((!defined($runScript)) || ($runScript eq '')) {
 		$log->info("Execute: using server pref");
-		$runScript = $prefs->get('plugin-Execute-stop');
+		$runScript = $prefs->get('stop');
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
@@ -225,12 +242,12 @@ sub commandCallbackPlay {
 	
 	my $runScript;
 	if (my $scripts = $prefs->client($client)->get('script')) {
-		$runScript = $scripts ->[1];
+		$runScript = $scripts->[1];
 	}
 
 	if ((!defined($runScript)) || ($runScript eq '')) {
 		$log->info("Execute: using server pref");
-		$runScript = $prefs->get('plugin-Execute-play');
+		$runScript = $prefs->get('play');
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
@@ -253,12 +270,12 @@ sub commandCallbackOpen {
 	
 	my $runScript;
 	if (my $scripts = $prefs->client($client)->get('script')) {
-		$runScript = $scripts ->[0];
+		$runScript = $scripts->[0];
 	}
 	
 	if ((!defined($runScript)) || ($runScript eq '')) {
 		$log->info("using server pref");
-		$runScript = $prefs->get('plugin-Execute-open');
+		$runScript = $prefs->get('open');
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
@@ -284,20 +301,20 @@ sub commandCallbackPower {
 	if ($client->power) {
 		$log->info("Execute: Power On");
 		if (my $scripts = $prefs->client($client)->get('script')) {
-			$runScript = $scripts ->[3];
+			$runScript = $scripts->[3];
 		}
 	} else {
 		$log->info("Execute: Power Off");
 		if (my $scripts = $prefs->client($client)->get('script')) {
-			$runScript = $scripts ->[4];
+			$runScript = $scripts->[4];
 		}
 	}
 	if ((!defined($runScript)) || ($runScript eq '')) {
 		$log->info("Execute: using server pref");
 		if ($client->power) {
-			$runScript = $prefs->get('plugin-Execute-power_on');
+			$runScript = $prefs->get('power_on');
 		} else {
-			$runScript = $prefs->get('plugin-Execute-power_off');
+			$runScript = $prefs->get('power_off');
 		}
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
