@@ -57,7 +57,7 @@ sub prefs {
 sub handler {
 	my ($class, $client, $paramRef) = @_;
 	
-	my %scripts = Plugins::ExecuteScript::Pluginscriptlist();
+	my %scripts = Plugins::ExecuteScript::Plugin::scriptlist();
 	$paramRef->{'scriptOptions'} = \%scripts;
 	
 	return $class->SUPER::handler($client, $paramRef);
