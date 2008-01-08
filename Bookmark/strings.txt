@@ -1,4 +1,4 @@
-﻿PLUGIN_BOOKMARK
+PLUGIN_BOOKMARK
 	EN	Bookmarks v2
 	DE	Lesezeichen v2
 
