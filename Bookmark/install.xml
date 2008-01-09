@@ -3,7 +3,7 @@
   <name>PLUGIN_BOOKMARK</name>
   <creator>Kevin Deane-Freeman</creator>
   <defaultState>enabled</defaultState>
-  <description>PLUGIN_BOOKMARK</description>
+  <description>PLUGIN_BOOKMARK_DESC</description>
   <email>kevindf_at_shaw.ca</email>
   <homepageURL>http://www.deane-freeman.com/slimserver/</homepageURL>
   <id>fc736967-f5bc-40cf-b5d7-6becdd0a6863</id>

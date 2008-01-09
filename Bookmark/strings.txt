@@ -2,6 +2,9 @@ PLUGIN_BOOKMARK
 	EN	Bookmarks v2
 	DE	Lesezeichen v2
 
+PLUGIN_BOOKMARK_DESC
+	EN	Save and up to 10 tracks for restoring later to the same point.
+
 PLUGIN_BOOKMARK_SAVE
 	EN	Press PLAY or # to save
 	DE	Drücke PLAY oder # zum Speichern
