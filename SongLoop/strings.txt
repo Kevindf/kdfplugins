@@ -5,6 +5,9 @@
 PLUGIN_SONGLOOP
 	EN	Song Loop
 
+PLUGIN_SONGLOOP_DESC
+	EN	Loop a subsection of a track repeatedly
+
 PLUGIN_SONGLOOP_SET_START
 	EN	Start At:
 
