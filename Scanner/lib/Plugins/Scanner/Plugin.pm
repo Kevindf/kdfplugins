@@ -27,9 +27,10 @@ use Slim::Utils::Strings qw (string);
 use File::Spec::Functions qw(:ALL);
 
 use vars qw($VERSION);
-$VERSION = substr(q$Revision: 1.2 $,10);
+$VERSION = substr(q$Revision: 1.3 $,10);
 
 my $offset=0;
+my %functions;
 
 sub getDisplayName {return 'PLUGIN_SCANNER'}
 
@@ -39,7 +40,7 @@ sub getDisplayName {return 'PLUGIN_SCANNER'}
 
 my $log          = Slim::Utils::Log->addLogCategory({
 	'category'     => 'plugin.songscanner',
-	'defaultLevel' => 'WARN',
+	'defaultLevel' => 'ERROR',
 	'description'  => getDisplayName(),
 });
 
@@ -89,32 +90,6 @@ sub scannerExitHandler {
 	}
 }
 
-my %functions = (
-	'right' => sub  {
-		my ($client,$funct,$functarg) = @_;
-		scannerExitHandler($client,'RIGHT');
-	},
-	'left' => sub {
-		my $client = shift;
-		scannerExitHandler($client,'LEFT');
-	},
-	'play' => sub {
-		my $client = shift;
-		Slim::Player::Source::playmode($client,"play");
-		Slim::Player::Source::gototime($client, $offset, 1);
-		$client->showBriefly($client->currentSongLines());
-		if ($jumptomode) {
-			Slim::Buttons::Common::popMode($client);
-			$jumptomode = 0;
-		}
-	},
-	'jumptoscanner' => sub {
-		my $client = shift;
-		Slim::Buttons::Common::pushModeLeft( $client, 'Plugins::Scanner::Plugin');
-		$jumptomode = 1;
-	},
-);
-
 sub getFunctions {
 	return \%functions;
 }
@@ -145,5 +120,32 @@ sub setMode {
 
 sub initPlugin {
 	my $class = shift;
+	
+	%functions = (
+		'right' => sub  {
+			my ($client,$funct,$functarg) = @_;
+			scannerExitHandler($client,'RIGHT');
+		},
+		'left' => sub {
+			my $client = shift;
+			scannerExitHandler($client,'LEFT');
+		},
+		'play' => sub {
+			my $client = shift;
+			Slim::Player::Source::playmode($client,"play");
+			Slim::Player::Source::gototime($client, $offset, 1);
+			$client->showBriefly($client->currentSongLines());
+			if ($jumptomode) {
+				Slim::Buttons::Common::popMode($client);
+				$jumptomode = 0;
+			}
+		},
+		'jumptoscanner' => sub {
+			my $client = shift;
+			Slim::Buttons::Common::pushModeLeft( $client, 'Plugins::Scanner::Plugin');
+			$jumptomode = 1;
+		},
+	);
+
 	$class->SUPER::initPlugin();
 }

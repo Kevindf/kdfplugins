@@ -39,7 +39,7 @@ my $lastFillday = undef;
 
 my $log = Slim::Utils::Log->addLogCategory({
 	'category'     => 'plugin.extendedalarm',
-	'defaultLevel' => 'DEBUG',
+	'defaultLevel' => 'ERROR',
 	'description'  => 'PLUGIN_ALARM',
 });
 

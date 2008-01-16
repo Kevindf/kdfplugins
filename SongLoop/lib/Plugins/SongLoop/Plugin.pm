@@ -23,9 +23,10 @@ use Slim::Utils::Strings qw (string);
 use File::Spec::Functions qw(:ALL);
 
 use vars qw($VERSION);
-$VERSION = substr(q$Revision: 1.1 $,10);
+$VERSION = substr(q$Revision: 1.2 $,10);
 
 my $offset=0;
+my %functions;
 
 sub getDisplayName {return 'PLUGIN_SONGLOOP'};
 
@@ -36,7 +37,7 @@ sub getDisplayName {return 'PLUGIN_SONGLOOP'};
 
 my $log          = Slim::Utils::Log->addLogCategory({
 	'category'     => 'plugin.songloop',
-	'defaultLevel' => 'WARN',
+	'defaultLevel' => 'ERROR',
 	'description'  => getDisplayName(),
 });
 
@@ -115,30 +116,6 @@ sub checkLoop {
 	setTimer($client);
 }
 
-my %functions = (
-	'right' => sub  {
-		my ($client,$funct,$functarg) = @_;
-		scannerExitHandler($client,'RIGHT');
-	},
-	'left' => sub {
-		my $client = shift;
-		scannerExitHandler($client,'LEFT');
-	},
-	'play' => sub {
-		my $client = shift;
-		
-		if ($prefs->client($client)->get('songloopStartTime')) {
-			$prefs->client($client)->set('songloopEndTime',$offset);
-			Slim::Player::Source::playmode($client,"play");
-			Slim::Player::Source::gototime($client,$prefs->client($client)->get('songloopStartTime'), 1);
-			setTimer($client);
-		} else {
-			$prefs->client($client)->set('songloopStartTime',$offset);
-		}
-		$client->update();
-	},
-);
-
 sub getFunctions {
 	return \%functions;
 }
@@ -177,5 +154,30 @@ sub setMode {
 
 sub initPlugin {
 	my $class = shift;
+	
+	%functions = (
+		'right' => sub  {
+			my ($client,$funct,$functarg) = @_;
+			scannerExitHandler($client,'RIGHT');
+		},
+		'left' => sub {
+			my $client = shift;
+			scannerExitHandler($client,'LEFT');
+		},
+		'play' => sub {
+			my $client = shift;
+			
+			if ($prefs->client($client)->get('songloopStartTime')) {
+				$prefs->client($client)->set('songloopEndTime',$offset);
+				Slim::Player::Source::playmode($client,"play");
+				Slim::Player::Source::gototime($client,$prefs->client($client)->get('songloopStartTime'), 1);
+				setTimer($client);
+			} else {
+				$prefs->client($client)->set('songloopStartTime',$offset);
+			}
+			$client->update();
+		},
+	);
+
 	$class->SUPER::initPlugin();
 }
