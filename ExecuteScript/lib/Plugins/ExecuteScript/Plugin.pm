@@ -45,7 +45,7 @@ sub scriptPath {
 	my $scriptPath = $Bin.'/scripts';
 
 	if (Slim::Utils::OSDetect::OS() eq 'mac') {
-		$scriptPath = catfile(Slim::Utils::Prefs::preferencesPath(),'scripts');
+		$scriptPath = catfile((Slim::Utils::Prefs::dir() || Slim::Utils::OSDetect::dirsFor('prefs')),'scripts');
 	}
 	return $scriptPath;
 }
