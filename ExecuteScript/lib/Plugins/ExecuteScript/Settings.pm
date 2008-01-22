@@ -59,6 +59,7 @@ sub handler {
 	
 	my %scripts = Plugins::ExecuteScript::Plugin::scriptlist();
 	$paramRef->{'scriptOptions'} = \%scripts;
+	$paramRef->{'scriptPath'} = Plugins::ExecuteScript::Plugin::scriptPath();
 	
 	return $class->SUPER::handler($client, $paramRef);
 }

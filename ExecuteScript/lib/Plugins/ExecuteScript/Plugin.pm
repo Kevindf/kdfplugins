@@ -42,11 +42,8 @@ my $log          = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.executescript');
 
 sub scriptPath {
-	my $scriptPath = $Bin.'/scripts';
-
-	if (Slim::Utils::OSDetect::OS() eq 'mac') {
-		$scriptPath = catfile((Slim::Utils::Prefs::dir() || Slim::Utils::OSDetect::dirsFor('prefs')),'scripts');
-	}
+	my $scriptPath = catfile((Slim::Utils::Prefs::dir() || Slim::Utils::OSDetect::dirsFor('prefs')),'scripts');
+	
 	return $scriptPath;
 }
 my @events;

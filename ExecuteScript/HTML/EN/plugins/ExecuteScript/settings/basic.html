@@ -3,6 +3,11 @@
 	<div class="settingSection">
 		<div class="groupHead">[% "PLUGIN_EXECUTE_SCRIPT" | string | upper %]</div>
 		<div class="groupDesc">[% "PLUGIN_GROUP_EXECUTE_DESC" | string %]</div>
+		<div class="groupDesc">[% "PLUGIN_EXECUTE_PLAYERSETUP_DESC" | string %]</div>
+		
+		[% IF scriptPath %]
+		<div class="groupDesc">[% "PLUGIN_EXECUTE_SCRIPTPATH" | string %][% scriptPath %]</div>
+		[% END %]
 	</div>
 	
 	[% FOREACH thispref = prefs %]

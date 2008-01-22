@@ -5,7 +5,13 @@ PLUGIN_GROUP_EXECUTE
 	EN	Execute Script On Event
 
 PLUGIN_GROUP_EXECUTE_DESC
-	EN	Select scripts or system commands to execute on certain server events. Any individual player settings will override unless left undefined or set to "(server)"
+	EN	Select scripts or system commands to execute on certain server events.
+
+PLUGIN_EXECUTE_PLAYERSETUP_DESC
+	EN	Individual players may have individual settings that override the global server settings by selecting scripts via the remote.  Any players set to "(server)" will use the global server setting.
+
+PLUGIN_EXECUTE_SCRIPTPATH
+	EN	Looking for scripts at:
 
 PLUGIN_EXECUTE_PLAY
 	EN	Execute On Play File
