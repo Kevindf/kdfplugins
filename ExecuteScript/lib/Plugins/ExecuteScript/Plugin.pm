@@ -1,8 +1,5 @@
-# Execute.pm by Kevin Deane-Freeman (kevindf@shaw.ca) April 2003
+# Execute plugin by Kevin Deane-Freeman (kevindf@shaw.ca) April 2003
 #
-# This code is derived from code with the following copyright message:
-#
-# SliMP3 Server Copyright (C) 2001 Sean Adams, Slim Devices Inc.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License,
 # version 2.
@@ -43,6 +40,8 @@ my $prefs = preferences('plugin.executescript');
 
 sub scriptPath {
 	my $scriptPath = catfile((Slim::Utils::Prefs::dir() || Slim::Utils::OSDetect::dirsFor('prefs')),'scripts');
+	
+	if (Slim::Utils::OSDetect::OS ne 'win') { $scriptPath =~ s/ /\\ /g };
 	
 	return $scriptPath;
 }
