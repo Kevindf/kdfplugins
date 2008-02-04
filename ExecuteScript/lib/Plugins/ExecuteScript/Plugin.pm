@@ -41,8 +41,6 @@ my $prefs = preferences('plugin.executescript');
 sub scriptPath {
 	my $scriptPath = catfile((Slim::Utils::Prefs::dir() || Slim::Utils::OSDetect::dirsFor('prefs')),'scripts');
 	
-	if (Slim::Utils::OSDetect::OS ne 'win') { $scriptPath =~ s/ /\\ /g };
-	
 	return $scriptPath;
 }
 my @events;
@@ -142,6 +140,7 @@ sub initPlugin {
 				$log->info("Execute: file: ".$runScript);
 				$log->info("Execute: Executing: ".$runScript);
 				$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
+				if (Slim::Utils::OSDetect::OS ne 'win') { $runScript =~ s/ /\\ /g };
 				system $runScript;
 			}
 		},
@@ -215,8 +214,9 @@ sub commandCallbackStop {
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Execute: Executing $runScript");
+		$log->info("Execute: Executing $runScriptPath");
 		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
+		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
 		system $runScriptPath;
 	} else {
 		$log->warn("Execute: No Script Selected");
@@ -247,8 +247,9 @@ sub commandCallbackPlay {
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Executing $runScript");
+		$log->info("Executing $runScriptPath");
 		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
+		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
 		system $runScriptPath;
 	} else {
 		$log->warn("Execute: No Script Selected");
@@ -275,8 +276,9 @@ sub commandCallbackOpen {
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Execute: Executing $runScript");
+		$log->info("Execute: Executing $runScriptPath");
 		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
+		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
 		system $runScriptPath;
 	} else {
 		$log->warn("Execute: No Script Selected");
@@ -315,8 +317,9 @@ sub commandCallbackPower {
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Execute: Executing $runScript\n");
+		$log->info("Execute: Executing $runScriptPath\n");
 		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
+		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
 		system $runScriptPath;
 	} else {
 		$log->warn("Execute: No Script Selected");
