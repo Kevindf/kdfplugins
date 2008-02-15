@@ -27,6 +27,10 @@ use Slim::Utils::Strings qw (string);
 
 use Plugins::Email::Settings;
 
+use Slim::Utils::Prefs;
+
+my $prefs = preferences('plugin.email');
+
 use vars qw($VERSION);
 $VERSION = substr(q$Revision: 1.1 $,10);
 
@@ -67,7 +71,7 @@ sub getMessage {
 	for my $serverName (@serverNames) {
 		my $userId = $userIds[$serverNum];
 		my $password = $passwords[$serverNum];
-		my $useSSL = Slim::Utils::Prefs::get('plugin-Email-useSSL');
+		my $useSSL = $prefs->get('useSSL');
 	
 		my $pop3 = new Mail::POP3Client (
 			HOST      => $serverName,
@@ -113,10 +117,10 @@ sub doFetch {
 	
 	$fetching{$client} = 1;
 	
-	@serverNames = split(",",Slim::Utils::Prefs::get('plugin-Email-servers'));
-	@userIds = split(",",Slim::Utils::Prefs::get('plugin-Email-users'));
-	@passwords = split(",",Slim::Utils::Prefs::get('plugin-Email-passwords'));
-	my $useSSL = Slim::Utils::Prefs::get('plugin-Email-useSSL');
+	@serverNames = split(",",$prefs->get('servers'));
+	@userIds = split(",",$prefs->get('users'));
+	@passwords = split(",",$prefs->get('passwords'));
+	my $useSSL = $prefs->get('useSSL');
 	
 	$error{$client} = 0;
 	
@@ -226,7 +230,7 @@ sub checkEmail {
 		my $line1 = string('PLUGIN_EMAIL_UHAVE')." ".$numMails." ".string('PLUGIN_EMAIL_MESSAGES');
 		my $line2 = string('PLUGIN_EMAIL_NEW');
 		
-		my $time =  Slim::Utils::Prefs::get('plugin-Email-display');
+		my $time =  $prefs->get('display');
 		
 		if (!defined($time)) {$time = 10;};
 
@@ -236,7 +240,7 @@ sub checkEmail {
 			'block'    => 1,
 		});
 
-		if (Slim::Utils::Prefs::get('plugin-Email-audio') && (Slim::Buttons::Common::mode($client) ne "off")) {
+		if ($prefs->get('audio') && (Slim::Buttons::Common::mode($client) ne "off")) {
 			#Audible Announce Option
 			$client->execute(["playlist", "insert", $mailAlert]);
 			
@@ -257,7 +261,7 @@ sub checkEmail {
 		} else {
 			my $line1 = string('PLUGIN_EMAIL_UHAVE')." ".$numMails." ".string('PLUGIN_EMAIL_MESSAGES');
 			my $line2 = string('PLUGIN_EMAIL_NEW');
-			my $time  =  Slim::Utils::Prefs::get('plugin-Email-display');
+			my $time  =  $prefs->get('display');
 			
 			if (!defined($time)) {$time = 10;};
 			
@@ -270,7 +274,7 @@ sub checkEmail {
 		}
 	}
 	
-	my $mins = Slim::Utils::Prefs::get('plugin-Email-checkwhen');
+	my $mins = $prefs->get('checkwhen');
 	
 	if (!defined($mins)) {$mins = 5;};
 	

@@ -19,6 +19,12 @@ my $log = Slim::Utils::Log->addLogCategory({
 	'description'  => 'PLUGIN_EMAIL_BROWSER',
 });
 
+
+use Slim::Utils::Prefs;
+
+my $prefs = preferences('plugin.email');
+
+
 sub name {
 	return 'PLUGIN_EMAIL_BROWSER';
 }
@@ -27,35 +33,20 @@ sub page {
 	return 'plugins/Email/settings/basic.html';
 }
 
-sub handler {
-	my ($class, $client, $params) = @_;
-
-	# These are lame preference names.
-	my @prefs = qw(
+sub prefs {
+	return qw(
 		checkwhen
 		display
 		audio
 		servers
 		users
 		passwords
+		UseSSL
 	);
+}
 
-	if ($params->{'submit'}) {
-	
-		my @changed = ();
-
-		for my $pref (@prefs) {
-	
-			Slim::Utils::Prefs::set("plugin-Email-".$pref, $params->{$pref});
-		}
-		
-	}
-
-	for my $pref (@prefs) {
-
-		$params->{'prefs'}->{$pref} = Slim::Utils::Prefs::get("plugin-Email-".$pref);
-
-	}
+sub handler {
+	my ($class, $client, $params) = @_;
 
 	return $class->SUPER::handler($client, $params);
 }
