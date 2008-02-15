@@ -22,9 +22,6 @@ my $log = Slim::Utils::Log->addLogCategory({
 
 use Slim::Utils::Prefs;
 
-my $prefs = preferences('plugin.email');
-
-
 sub name {
 	return 'PLUGIN_EMAIL_BROWSER';
 }
@@ -34,7 +31,7 @@ sub page {
 }
 
 sub prefs {
-	return qw(
+	return preferences('plugin.email'),qw(
 		checkwhen
 		display
 		audio
@@ -43,12 +40,6 @@ sub prefs {
 		passwords
 		UseSSL
 	);
-}
-
-sub handler {
-	my ($class, $client, $params) = @_;
-
-	return $class->SUPER::handler($client, $params);
 }
 
 1;

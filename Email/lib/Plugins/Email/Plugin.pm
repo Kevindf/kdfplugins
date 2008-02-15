@@ -128,17 +128,6 @@ sub doFetch {
 	
 	$numMails = 0;
 	
-	#my $imap = Mail::IMAPClient->new(  
-       #                 Server => 'jupiter',
-        #                User    => 'fishbone',
-        #                Password=> '432is666',
-        #                Clear   => 5,   # Unnecessary since '5' is the default
-        #);
-	
-	#Data::Dump::dump($imap->select("INBOX"));
-	
-	#my $hashref = $imap->parse_headers(1,"Date","Received","Subject","To");
-	#Data::Dump::dump($hashref);
 	my $newMail = 0;
 	
 	for my $serverName (@serverNames) {
@@ -160,7 +149,7 @@ sub doFetch {
 		} else {
 
 			$pop3->Login;
-			#Data::Dump::dump($pop3);
+			Data::Dump::dump($pop3);
 			
 			#%newMessageList = ();
 			@messages = ();
@@ -328,7 +317,7 @@ sub setMode {
 							return $messageList{$_[0]}{$messages[$_[1]]}{'subject'};
 						},
 			'header'		=> sub {
-							return $messageList{$_[0]}{$messages[$_[1]]}{'from'};
+							return $numMails != -1 ? $messageList{$_[0]}{$messages[$_[1]]}{'from'} : string('PLUGIN_EMAIL_BROWSER');
 						},
 			'headerArgs'		=> 'CV',
 			'callback'		=> \&selectMailHandler,
@@ -396,7 +385,7 @@ sub overlayFunc {
 	
 	return (
 			"(".($client->modeParam('listIndex') + 1)." ".$client->string("OF")." ".scalar @{$client->modeParam('listRef')}.")", 
-			Slim::Display::Display::symbol('rightarrow')
+			$client->symbols('rightarrow')
 		);
 }
 
