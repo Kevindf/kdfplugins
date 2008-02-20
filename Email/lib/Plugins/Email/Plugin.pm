@@ -51,7 +51,7 @@ my %error = ();
 
 my %functions = ();
 
-my $mailAlert = Slim::Utils::Misc::fileURLFromPath(catfile($Bin,'Plugins','Email.mp3'));
+my $mailAlert = Slim::Utils::Misc::fileURLFromPath('Email.mp3'));
 
 my @serverNames;
 my @userIds;
@@ -149,14 +149,14 @@ sub doFetch {
 		} else {
 
 			$pop3->Login;
-			Data::Dump::dump($pop3);
+			$log->debug(Data::Dump::dump($pop3));
 			
 			#%newMessageList = ();
 			@messages = ();
 			
 			$numMails = $pop3->Count;
 			
-			print "Message count is $numMails\n";
+			$log->debug("Message count is $numMails");
 			
 			#print $pop3->Alive."\n";
 			for (my $i = 1; $i <= $pop3->Count(); $i++) {
@@ -167,7 +167,7 @@ sub doFetch {
 				push @messages, $id;
 				
 				if (!exists $messageList{$client}{$id}) {
-					#print "NEW MAIL\n";
+					$log->debug("Message $id is new");
 					$newMail = 1;
 				}
 				
@@ -310,25 +310,32 @@ sub setMode {
 		
 	if (!$error{$client}) { checkEmail($client);};
 	
-	if ($numMails) {
+	if ($log->is_debug) {
+		use Data::Dump;
+		Data::Dump::dump($messageList{$client},@messages);
+	}
+	#if ($numMails) {
 		my %params = (
-			'listRef'		=> [1..$numMails],
-			'externRef'		=> sub {
-							return $messageList{$_[0]}{$messages[$_[1]]}{'subject'};
+			'listRef'		=> [0..($numMails-1)],
+			'externRef'		=> sub { if ($numMails) {
+										return $messageList{$_[0]}{$messages[$_[1]]}{'subject'};
+									} else {
+										return string("EMPTY");
+									}
 						},
 			'header'		=> sub {
 							return $numMails != -1 ? $messageList{$_[0]}{$messages[$_[1]]}{'from'} : string('PLUGIN_EMAIL_BROWSER');
 						},
 			'headerArgs'		=> 'CV',
-			'callback'		=> \&selectMailHandler,
+			'callback'			=> \&selectMailHandler,
 			'overlayRef'		=> \&overlayFunc,
 			'overlayRefArgs'	=> 'CV',
 			);
 			
 		Slim::Buttons::Common::pushModeLeft($client,'INPUT.List',\%params);
-	} else {
+	#} else {
 	#	$client->lines(\&lines);
-	}
+	#}
 }
 
 sub selectMailHandler {

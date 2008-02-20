@@ -21,7 +21,10 @@
 		</tr><tr>
 		<td><label for="passwords" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-PASSWORDS" | string %][% "COLON" | string %]</label></td>
 		<td><input type="password" class="stdedit" name="passwords" id="passwords" value="[% prefs.passwords %]" size="25"></td>
-		</tr></table>
+		</tr><tr>
+		<td><label for="UseSSL" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-USESSL" | string %][% "COLON" | string %]</label></td>
+		<td><input type="checkbox" [% IF prefs.UseSSL %]checked [% END %] class="stdedit" name="UseSSL" id="UseSSL" /></td>
+		</tr></tr></table>
 		[% END %]
 	[% END %]
 [% END %]
