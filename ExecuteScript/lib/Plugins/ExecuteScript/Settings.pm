@@ -26,7 +26,7 @@ $prefs->migrate(1, sub {
 	$prefs->set('play', Slim::Utils::Prefs::OldPrefs->get('plugin-Execute-play'));
 	$prefs->set('stop', Slim::Utils::Prefs::OldPrefs->get('plugin-Execute-stop'));
 	$prefs->set('power_on', Slim::Utils::Prefs::OldPrefs->get('plugin-Execute-power_on'));
-	$prefs->set('p0wer_off', Slim::Utils::Prefs::OldPrefs->get('plugin-Execute-power_off'));
+	$prefs->set('power_off', Slim::Utils::Prefs::OldPrefs->get('plugin-Execute-power_off'));
 	1;
 });
 
