@@ -28,6 +28,9 @@ PLUGIN_EXECUTE_POWER_ON
 PLUGIN_EXECUTE_POWER_OFF
 	EN	Execute On Power Off
 
+PLUGIN_EXECUTE_ON_DEMAND
+	EN	Execute On Demand
+
 PLUGIN_SELECT_SCRIPT
 	EN	Select Script
 
@@ -63,3 +66,10 @@ SETUP_PLUGIN-EXECUTE-POWER_OFF
 
 SETUP_PLUGIN-EXECUTE-POWER_OFF_DESC
 	EN	Run when a player is turned off.
+
+SETUP_PLUGIN-EXECUTE-ON_DEMAND
+	EN	Execute On Demand
+
+SETUP_PLUGIN-EXECUTE-ON_DEMAND_DESC
+	EN	Execute On Mapped Button, or immediately from Plugin Player Menu
+

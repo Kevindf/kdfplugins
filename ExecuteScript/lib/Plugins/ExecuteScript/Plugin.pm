@@ -21,7 +21,7 @@ use Slim::Utils::Misc;
 use Slim::Utils::Prefs;
 
 use vars qw($VERSION);
-$VERSION = substr(q$Revision: 1.18 $,10);
+$VERSION = substr(q$Revision: 2.1 $,10);
 
 use Plugins::ExecuteScript::Settings;
 
@@ -69,6 +69,7 @@ sub initPlugin {
 		PLUGIN_EXECUTE_STOP
 		PLUGIN_EXECUTE_POWER_ON
 		PLUGIN_EXECUTE_POWER_OFF
+		PLUGIN_EXECUTE_ON_DEMAND
 	);
 	
 	%functions = (
@@ -123,6 +124,17 @@ sub initPlugin {
 							$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
 							$prefs->client($client)->set('script', $scripts);
 							$client->update();
+							
+							return unless $scripts->[ $selection  ];
+							
+							if (my $runScript = catfile(scriptPath(),$item)) {
+								$log->info("Execute: path: ".scriptPath());
+								$log->info("Execute: file: ".$runScript);
+								$log->info("Execute: Executing: ".$runScript);
+								$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript],'duration'=>2});
+								if (Slim::Utils::OSDetect::OS ne 'win') { $runScript =~ s/ /\\ /g };
+								system $runScript;
+							}
 				},
 				'valueRef'       => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
 				'initialValue'   => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
@@ -133,16 +145,10 @@ sub initPlugin {
 			
 			Slim::Buttons::Common::pushModeLeft($client, 'INPUT.Choice',\%params);
 		},
-		'play' => sub {
+		'execute_on_demand' => sub {
 			my $client = shift;
-			if (my $runScript = catfile(scriptPath(),${$client->modeParam('valueRef')})) {
-				$log->info("Execute: path: ".scriptPath());
-				$log->info("Execute: file: ".$runScript);
-				$log->info("Execute: Executing: ".$runScript);
-				$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
-				if (Slim::Utils::OSDetect::OS ne 'win') { $runScript =~ s/ /\\ /g };
-				system $runScript;
-			}
+			doThisScript('on_demand');
+			$client->showBriefly({'line'=>[$client->string('PLUGIN_EXECUTE_GO'),$client->string('PLUGIN_EXECUTE_ON_DEMAND')]});
 		},
 	);
 	Slim::Control::Request::subscribe(\&commandCallbackStop, [['stop']]);
@@ -193,24 +199,28 @@ sub scriptlist {
 	return %scriptList;
 }
 
-sub commandCallbackStop {
-	my $request = shift;
-
-	my $client = $request->client();
-	return unless $client;
+sub doThisScript {
+	my $client = shift;
+	my $script = shift;
 	
-	my $code   = $request->getParam('_buttoncode');
+	my %scriptChoices = {
+		'open'    => 0,
+		play      => 1,
+		stop      => 2,
+		power_on  => 3,
+		power_off => 4,
+		on_demand => 5,
+	};
 
-	$log->info("Execute: Play Stopped");
 	my $scriptPath = scriptPath();
 	
 	my $runScript;
 	if (my $scripts = $prefs->client($client)->get('script')) {
-		$runScript = $scripts ->[2];
+		$runScript = $scripts ->[$scriptChoices{$script}];
 	}
 	if ((!defined($runScript)) || ($runScript eq '')) {
 		$log->info("Execute: using server pref");
-		$runScript = $prefs->get('stop');
+		$runScript = $prefs->get($script);
 	}
 	if (defined($runScript) && ($runScript ne "(none)")) {
 		my $runScriptPath = catfile($scriptPath,$runScript);
@@ -221,6 +231,18 @@ sub commandCallbackStop {
 	} else {
 		$log->warn("Execute: No Script Selected");
 	}
+}
+
+sub commandCallbackStop {
+	my $request = shift;
+
+	my $client = $request->client();
+	return unless $client;
+	
+	my $code   = $request->getParam('_buttoncode');
+
+	$log->info("Execute: Play Stopped");
+	doThisScript($client,"stop");
 };
 	
 sub commandCallbackPlay {
@@ -234,26 +256,7 @@ sub commandCallbackPlay {
 	}
 	
 	$log->info("Execute: Play Started");
-	my $scriptPath = scriptPath();
-	
-	my $runScript;
-	if (my $scripts = $prefs->client($client)->get('script')) {
-		$runScript = $scripts->[1];
-	}
-
-	if ((!defined($runScript)) || ($runScript eq '')) {
-		$log->info("Execute: using server pref");
-		$runScript = $prefs->get('play');
-	}
-	if (defined($runScript) && ($runScript ne "(none)")) {
-		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Executing $runScriptPath");
-		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
-		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
-		system $runScriptPath;
-	} else {
-		$log->warn("Execute: No Script Selected");
-	}
+	doThisScript($client,"play");
 };
 	
 sub commandCallbackOpen {
@@ -263,26 +266,7 @@ sub commandCallbackOpen {
 	return unless $client;
 
 	$log->info("Execute: File Open");
-	my $scriptPath = scriptPath();
-	
-	my $runScript;
-	if (my $scripts = $prefs->client($client)->get('script')) {
-		$runScript = $scripts->[0];
-	}
-	
-	if ((!defined($runScript)) || ($runScript eq '')) {
-		$log->info("using server pref");
-		$runScript = $prefs->get('open');
-	}
-	if (defined($runScript) && ($runScript ne "(none)")) {
-		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Execute: Executing $runScriptPath");
-		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
-		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
-		system $runScriptPath;
-	} else {
-		$log->warn("Execute: No Script Selected");
-	}
+	doThisScript($client,"open");
 
 };
 	
@@ -294,36 +278,14 @@ sub commandCallbackPower {
 	
 	my $code   = $request->getParam('_buttoncode');
 
-	my $scriptPath = scriptPath();
-	my $runScript;
-	if ($client->power) {
+	 if ($client->power) {
 		$log->info("Execute: Power On");
-		if (my $scripts = $prefs->client($client)->get('script')) {
-			$runScript = $scripts->[3];
-		}
+		doThisScript($client,"power_on");
 	} else {
 		$log->info("Execute: Power Off");
-		if (my $scripts = $prefs->client($client)->get('script')) {
-			$runScript = $scripts->[4];
-		}
+		doThisScript($client,"power_off");
 	}
-	if ((!defined($runScript)) || ($runScript eq '')) {
-		$log->info("Execute: using server pref");
-		if ($client->power) {
-			$runScript = $prefs->get('power_on');
-		} else {
-			$runScript = $prefs->get('power_off');
-		}
-	}
-	if (defined($runScript) && ($runScript ne "(none)")) {
-		my $runScriptPath = catfile($scriptPath,$runScript);
-		$log->info("Execute: Executing $runScriptPath\n");
-		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
-		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
-		system $runScriptPath;
-	} else {
-		$log->warn("Execute: No Script Selected");
-	}
+
 };
 
 1;

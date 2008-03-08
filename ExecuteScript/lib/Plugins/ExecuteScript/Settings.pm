@@ -51,6 +51,7 @@ sub prefs {
 		stop
 		power_on
 		power_off
+		on_demand
 	) );
 }
 
