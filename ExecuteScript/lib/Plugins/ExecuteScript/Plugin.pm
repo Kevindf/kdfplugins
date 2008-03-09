@@ -147,7 +147,7 @@ sub initPlugin {
 		},
 		'execute_on_demand' => sub {
 			my $client = shift;
-			doThisScript('on_demand');
+			doThisScript($client,'on_demand');
 			$client->showBriefly({'line'=>[$client->string('PLUGIN_EXECUTE_GO'),$client->string('PLUGIN_EXECUTE_ON_DEMAND')]});
 		},
 	);
@@ -279,11 +279,11 @@ sub commandCallbackPower {
 	my $code   = $request->getParam('_buttoncode');
 
 	 if ($client->power) {
-		$log->info("Execute: Power On");
-		doThisScript($client,"power_on");
-	} else {
 		$log->info("Execute: Power Off");
 		doThisScript($client,"power_off");
+	} else {
+		$log->info("Execute: Power On");
+		doThisScript($client,"power_On");
 	}
 
 };
