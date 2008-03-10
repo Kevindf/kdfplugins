@@ -203,14 +203,14 @@ sub doThisScript {
 	my $client = shift;
 	my $script = shift;
 	
-	my %scriptChoices = {
+	my %scriptChoices = (
 		'open'    => 0,
 		play      => 1,
 		stop      => 2,
 		power_on  => 3,
 		power_off => 4,
 		on_demand => 5,
-	};
+	);
 
 	my $scriptPath = scriptPath();
 	
@@ -279,11 +279,11 @@ sub commandCallbackPower {
 	my $code   = $request->getParam('_buttoncode');
 
 	 if ($client->power) {
+		$log->info("Execute: Power On");
+		doThisScript($client,"power_on");
+	} else {
 		$log->info("Execute: Power Off");
 		doThisScript($client,"power_off");
-	} else {
-		$log->info("Execute: Power On");
-		doThisScript($client,"power_On");
 	}
 
 };
