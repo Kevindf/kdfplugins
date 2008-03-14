@@ -1,0 +1,8 @@
+PLUGIN_MYTHREMOTE
+	EN	MythTV Remote
+
+PLUGIN_MYTHREMOTE_DESC
+	EN	Remote control for MythTV Frontends with remote control enabled.
+
+PLUGIN_MYTHREMOTE_INSTRUCTIONS
+	EN	Controlling Frontend, POWER to Exit

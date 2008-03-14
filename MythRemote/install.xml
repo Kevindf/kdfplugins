@@ -1,0 +1,18 @@
+<?xml version='1.0' standalone='yes'?>
+<extension>
+  <name>PLUGIN_MYTHREMOTE</name>
+  <creator>Kevin Deane-Freeman</creator>
+  <defaultState>enabled</defaultState>
+  <description>PLUGIN_MYTHREMOTE_DESC</description>
+  <email>kevindf_at_shaw.ca</email>
+  <homepageURL>http://www.deane-freeman.com/slimserver/</homepageURL>
+  <id>8830e7e7-3c4e-43dc-89e5-93900f349c55</id>
+  <module>Plugins::MythRemote::Plugin</module>
+  <targetApplication>
+    <id>SlimServer</id>
+    <maxVersion>7.0+</maxVersion>
+    <minVersion>7.0a</minVersion>
+  </targetApplication>
+  <type>2</type>
+  <version>0.1</version>
+</extension>
