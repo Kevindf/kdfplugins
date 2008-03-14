@@ -51,7 +51,7 @@ my %error = ();
 
 my %functions = ();
 
-my $mailAlert = Slim::Utils::Misc::fileURLFromPath('Email.mp3'));
+my $mailAlert = Slim::Utils::Misc::fileURLFromPath('Email.mp3');
 
 my @serverNames;
 my @userIds;
