@@ -104,6 +104,7 @@ sub handler {
 		month
 		dayofmonth
 		playlist
+		autoshuffle
 		fadeseconds
 	);
 	
