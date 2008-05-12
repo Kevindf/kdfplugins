@@ -1,4 +1,3 @@
-#line 1 "Plugins/ExtendedAlarm/Plugin.pm"
 # AlarmPlugin by Kevin Deane-Freeman (kevindf@shaw.ca) March 2003
 # Adapted from code by Lukas Hinsch
 # Updated by Dean Blackketter
@@ -11,7 +10,6 @@
 # modify it under the terms of the GNU General Public License,
 # version 2.
 
-#****EDIT THIS LINE TO MATCH THE FILENAME***
 package Plugins::ExtendedAlarm::Plugin;
 
 use base qw(Slim::Plugin::Base);
@@ -55,6 +53,7 @@ sub getDisplayName { return 'PLUGIN_ALARM' };
 
 my %functions;
 my %alarmActiveFunctions;
+my %customPlaylists;
 
 sub setMode {
 	my $class  = shift;
@@ -123,6 +122,15 @@ sub overlayAlarmsFunc {
 	}
 	
 	return (undef,$timestring.' '.$client->symbols('rightarrow'));
+}
+
+sub addCustomPlaylist {
+	my $class        = shift;
+	my $name         = shift;
+	my $callback     = shift;
+	my $callbackargs = shift;
+
+	$customPlaylists{$name} = $callback;
 }
 
 sub alarmSelectHandler {
@@ -270,7 +278,7 @@ sub menuExitHandler {
 							
 							$prefs->client($client)->set(
 								'playlist.'.$alarmID, 
-								exists $Slim::Buttons::AlarmClock::specialPlaylists{$item} ? $item : $item->url);
+								exists $Slim::Buttons::AlarmClock::specialPlaylists{$item} || exists $customPlaylists{$name} ? $item : $item->url);
 							$client->update();
 				},
 				'onAdd'          => sub { 
@@ -278,7 +286,7 @@ sub menuExitHandler {
 							
 							$prefs->client($client)->set(
 								'playlist.'.$alarmID, 
-								exists $Slim::Buttons::AlarmClock::specialPlaylists{$item} ? $item : $item->url);
+								exists $Slim::Buttons::AlarmClock::specialPlaylists{$item} || exists $customPlaylists{$name} ? $item : $item->url);
 							$client->update();
 				},
 				'onPlay'         => sub { 
@@ -286,7 +294,7 @@ sub menuExitHandler {
 							
 							$prefs->client($client)->set(
 								'playlist.'.$alarmID, 
-								exists $Slim::Buttons::AlarmClock::specialPlaylists{$item} ? $item : $item->url);
+								exists $Slim::Buttons::AlarmClock::specialPlaylists{$item} || exists $customPlaylists{$name} ? $item : $item->url);
 							$client->update();
 				},
 				'valueRef'       => sub { return $prefs->client($_[0])->get('playlist.'.$alarmID) },
@@ -301,7 +309,7 @@ sub menuExitHandler {
 				$playlist->{'value'} = $playlist->url;
 			}
 
-			$params{'listRef'} = [ @playlists, keys %Slim::Buttons::AlarmClock::specialPlaylists];
+			$params{'listRef'} = [ @playlists, keys %Slim::Buttons::AlarmClock::specialPlaylists, keys %customPlaylists];
 			
 			Slim::Buttons::Common::pushModeLeft($client, 'INPUT.Choice',\%params);
 
@@ -975,6 +983,9 @@ sub alarmTrigger {
 	if ($Slim::Buttons::AlarmClock::specialPlaylists{$playlist}) {
 			Slim::Plugin::RandomPlay::Plugin::playRandom($client,$Slim::Buttons::AlarmClock::specialPlaylists{$playlist});
 	
+	} elsif ($customPlaylists{$playlist}) {
+			&{$customPlaylists{$playlist}}($client);
+	
 	} elsif (defined $playlist && $playlist ne 'CURRENT_PLAYLIST') {
 
 			my $playlistObj = Slim::Schema->rs('Playlist')->objectForUrl({
@@ -1035,7 +1046,11 @@ sub playlists {
 	}
 
 	for my $key (keys %Slim::Buttons::AlarmClock::specialPlaylists) {
-		$playlists->{$key} = $key;
+		$playlists->{$key} = string($key);
+	}
+
+	for my $key (keys %customPlaylists) {
+		$playlists->{$key} = string($key);
 	}
 	
 	return $playlists;

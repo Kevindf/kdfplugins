@@ -195,24 +195,8 @@ sub handler {
 	
 	$paramRef->{'max'} = $prefs->get('count');
 
-	# Load any option lists for dynamic options.
-	my $playlists = {
-		'' => undef,
-	};
-
-	for my $playlist (Slim::Schema->rs('Playlist')->getPlaylists) {
-
-		$playlists->{$playlist->url} = Slim::Music::Info::standardTitle(undef, $playlist);
-	}
-
-	my $specialPlaylists = \%Slim::Buttons::AlarmClock::specialPlaylists;
-
-	for my $key (keys %{$specialPlaylists}) {
-
-		$playlists->{$key} = string($key);
-	}
-
-	$paramRef->{'playlistOptions'} = $playlists;
+	$paramRef->{'playlistOptions'} = Plugins::ExtendedAlarm::Plugin->playlists();
+	$paramRef->{'playlistOptions'}{''} = undef;
 
 	return $class->SUPER::handler($client, $paramRef);
 }
