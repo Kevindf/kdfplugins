@@ -226,8 +226,8 @@ sub doThisScript {
 		my $runScriptPath = catfile($scriptPath,$runScript);
 		$log->info("Execute: Executing $runScriptPath");
 		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
-		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g };
-		system $runScriptPath;
+		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g;
+		system $runScriptPath; } else {system '$runScriptPath';}
 	} else {
 		$log->warn("Execute: No Script Selected");
 	}
