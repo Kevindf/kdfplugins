@@ -5,25 +5,25 @@
 		[% WRAPPER settingGroup title="PLUGIN_EMAIL_BROWSER" desc="SETUP_GROUP_PLUGIN_EMAIL_DESC" %]
 		<table><tr>
 		<td><label for="checkwhen" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-CHECKWHEN" | string %][% "COLON" | string %]</label></td>
-		<td><input type="text" class="stdedit" name="checkwhen" id="checkwhen" value="[% prefs.checkwhen %]" size="15"></td>
+		<td><input type="text" class="stdedit" name="pref_checkwhen" id="pref_checkwhen" value="[% prefs.pref_checkwhen %]" size="15"></td>
 		</tr><tr>
 		<td><label for="display" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-DISPLAY" | string %][% "COLON" | string %]</label></td>
-		<td><input type="text" class="stdedit" name="display" id="display" value="[% prefs.display %]" size="15"></td>
+		<td><input type="text" class="stdedit" name="pref_display" id="pref_display" value="[% prefs.pref_display %]" size="15"></td>
 		</tr><tr>
 		<td><label for="audio" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-AUDIO" | string %][% "COLON" | string %]</label></yd>
-		<td><input type="checkbox" [% IF prefs.audio %]checked [% END %] class="stdedit" name="audio" id="audio" /></td>
+		<td><input type="checkbox" [% IF prefs.pref_audio %]checked [% END %] class="stdedit" name="pref_audio" id="pref_audio" /></td>
 		</tr><tr>
 		<td><label for="servers" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-SERVERS" | string %][% "COLON" | string %]</label></td>
-		<td><input type="text" class="stdedit" name="servers" id="servers" value="[% prefs.servers %]" size="25"></td>
+		<td><input type="text" class="stdedit" name="pref_servers" id="pref_servers" value="[% prefs.pref_servers %]" size="25"></td>
 		</tr><tr>
 		<td><label for="users" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-USERS" | string %][% "COLON" | string %]</label></td>
-		<td><input type="text" class="stdedit" name="users" id="users" value="[% prefs.users %]" size="25"></td>
+		<td><input type="text" class="stdedit" name="pref_users" id="pref_users" value="[% prefs.pref_users %]" size="25"></td>
 		</tr><tr>
 		<td><label for="passwords" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-PASSWORDS" | string %][% "COLON" | string %]</label></td>
-		<td><input type="password" class="stdedit" name="passwords" id="passwords" value="[% prefs.passwords %]" size="25"></td>
+		<td><input type="password" class="stdedit" name="pref_passwords" id="pref_passwords" value="[% prefs.pref_passwords %]" size="25"></td>
 		</tr><tr>
 		<td><label for="UseSSL" class="stdlabel">[% "SETUP_PLUGIN-EMAIL-USESSL" | string %][% "COLON" | string %]</label></td>
-		<td><input type="checkbox" [% IF prefs.UseSSL %]checked [% END %] class="stdedit" name="UseSSL" id="UseSSL" /></td>
+		<td><input type="checkbox" [% IF prefs.pref_UseSSL %]checked [% END %] class="stdedit" name="pref_UseSSL" id="pref_UseSSL" /></td>
 		</tr></tr></table>
 		[% END %]
 	[% END %]
