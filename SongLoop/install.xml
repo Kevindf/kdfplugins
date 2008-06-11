@@ -4,13 +4,13 @@
   <creator>Kevin Deane-Freeman</creator>
   <defaultState>enabled</defaultState>
   <description>PLUGIN_SONGLOOP_DESC</description>
-  <email>kevindf_at_shaw.ca</email>
-  <homepageURL>http://www.deane-freeman.com/slimserver/</homepageURL>
+  <email>plugins@deane-freeman.com</email>
+  <homepageURL>http://code.google.com/p/kdfplugins/</homepageURL>
   <id>aa0d5af6-ee53-43a0-8bf9-e11f79956410</id>
   <module>Plugins::SongLoop::Plugin</module>
   <targetApplication>
     <id>SlimServer</id>
-    <maxVersion>7.0+</maxVersion>
+    <maxVersion>7.2</maxVersion>
     <minVersion>7.0a</minVersion>
   </targetApplication>
   <type>2</type>
