@@ -26,7 +26,6 @@ $VERSION = substr(q$Revision: 2.1 $,10);
 use Plugins::ExecuteScript::Settings;
 
 my $interval = 1; # check every x seconds
-my @browseMenuChoices;
 my %menuSelection;
 my %functions;
 
@@ -51,11 +50,32 @@ sub getDisplayName { 'PLUGIN_EXECUTE_SCRIPT'; }
 
 # the routines
 sub setMode {
-	my $class = shift;
+	my $class  = shift;
 	my $client = shift;
+	my $method = shift;
+
+	if ($method eq 'pop') {
+		Slim::Buttons::Common::popMode($client);
+		return;
+	}
 
 	if (!defined($menuSelection{$client})) { $menuSelection{$client} = 0; };
-	$client->lines(\&lines);
+	
+	my %params = (
+		'listRef'		  => ['PLUGIN_EXECUTE_OPEN', 'PLUGIN_EXECUTE_PLAY', 'PLUGIN_EXECUTE_STOP', 'PLUGIN_EXECUTE_POWER_ON', 'PLUGIN_EXECUTE_POWER_OFF', 'PLUGIN_EXECUTE_ON_DEMAND'],
+		'stringExternRef' => 1,
+		'header'		  => "PLUGIN_EXECUTE_SCRIPT",
+		'stringHeader'    => 1,
+		'headerAddCount'	=> 1,
+		'overlayRef'      => sub { 
+			return (undef, shift->symbols('rightarrow')); 
+		},
+		'overlayRefArgs'  => 'CV',
+		'callback'		  => \&exitHandler,
+		'valueRef'		  => \$menuSelection{$client},
+	);
+	
+	Slim::Buttons::Common::pushModeLeft($client,'INPUT.List',\%params);
 }
 
 sub initPlugin {
@@ -63,88 +83,7 @@ sub initPlugin {
 	
 	my $prefs = preferences('plugin.executescript');
 	
-	@browseMenuChoices = qw(
-		PLUGIN_EXECUTE_OPEN
-		PLUGIN_EXECUTE_PLAY
-		PLUGIN_EXECUTE_STOP
-		PLUGIN_EXECUTE_POWER_ON
-		PLUGIN_EXECUTE_POWER_OFF
-		PLUGIN_EXECUTE_ON_DEMAND
-	);
-	
 	%functions = (
-		'up' => sub  {
-			my $client = shift;
-			my $newposition = Slim::Buttons::Common::scroll($client, -1, ($#browseMenuChoices + 1), $menuSelection{$client});
-	
-			$menuSelection{$client} =$newposition;
-			$client->update();
-		},
-		'down' => sub  {
-			my $client = shift;
-			my $newposition = Slim::Buttons::Common::scroll($client, +1, ($#browseMenuChoices + 1), $menuSelection{$client});
-	
-			$menuSelection{$client} =$newposition;
-			$client->update();
-		},
-		'left' => sub  {
-			my $client = shift;
-	
-			Slim::Buttons::Common::popModeRight($client);
-		},
-		'right' => sub  {
-			my $client = shift;
-#			my @oldlines = Slim::Display::Display::curLines($client);
-			my $selection = $menuSelection{$client};
-			
-			my %params = (
-				'name'           => sub {return $_[1] },
-				'header'         => '{PLUGIN_SELECT_SCRIPT} {count}',
-				'pref'           => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)' },
-				'onRight'        => sub { 
-							my ( $client, $item ) = @_;
-							
-							my $scripts = $prefs->client($client)->get('script');
-							$scripts->[ $selection ] = $item eq '(server)' ? '' : $item ;
-							$prefs->client($client)->set('script', $scripts);
-							$client->update();
-				},
-				'onAdd'          => sub { 
-							my ( $client, $item ) = @_;
-							
-							my $scripts = $prefs->client($client)->get('script');
-							$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
-							$prefs->client($client)->set('script', $scripts);
-							$client->update();
-				},
-				'onPlay'         => sub { 
-							my ( $client, $item ) = @_;
-							
-							my $scripts = $prefs->client($client)->get('script');
-							$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
-							$prefs->client($client)->set('script', $scripts);
-							$client->update();
-							
-							return unless $scripts->[ $selection  ];
-							
-							if (my $runScript = catfile(scriptPath(),$item)) {
-								$log->info("Execute: path: ".scriptPath());
-								$log->info("Execute: file: ".$runScript);
-								$log->info("Execute: Executing: ".$runScript);
-								$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript],'duration'=>2});
-								if (Slim::Utils::OSDetect::OS ne 'win') { $runScript =~ s/ /\\ /g };
-								system $runScript;
-							}
-				},
-				'valueRef'       => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
-				'initialValue'   => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
-			);
-
-			my %scripts = scriptlist();
-			$params{'listRef'} = ['(server)',keys %scripts];
-			
-			Slim::Buttons::Common::pushModeLeft($client, 'INPUT.Choice',\%params);
-		},
 		'execute_on_demand' => sub {
 			my $client = shift;
 			doThisScript($client,'on_demand');
@@ -162,18 +101,66 @@ sub initPlugin {
 	$class->SUPER::initPlugin();
 }
 
-sub lines {
-	my $client = shift;
-	my ($line1, $line2, $overlay);
+sub exitHandler {
+	my ($client,$exittype) = @_;
+	$exittype = uc($exittype);
 
-	$line1 = string('PLUGIN_EXECUTE_SCRIPT');
-
-	$line2 = $client->string($browseMenuChoices[$menuSelection{$client}]);
-
-	return {'line'    => [$line1, $line2],
-		'overlay' => [undef, $client->symbols('rightarrow')]};
+	if ($exittype eq 'LEFT') {
+		Slim::Buttons::Common::popModeRight($client);
+		
+	} elsif ($exittype eq 'RIGHT') {
+	
+		my $selection = $client->modeParam('listIndex');
+		
+		my %params = (
+			'name'           => sub {return $_[1] },
+			'header'         => '{PLUGIN_SELECT_SCRIPT} {count}',
+			'pref'           => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)' },
+			'onRight'        => sub { 
+						my ( $client, $item ) = @_;
+						
+						my $scripts = $prefs->client($client)->get('script');
+						$scripts->[ $selection ] = $item eq '(server)' ? '' : $item ;
+						$prefs->client($client)->set('script', $scripts);
+						$client->update();
+			},
+			'onAdd'          => sub { 
+						my ( $client, $item ) = @_;
+						
+						my $scripts = $prefs->client($client)->get('script');
+						$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
+						$prefs->client($client)->set('script', $scripts);
+						$client->update();
+			},
+			'onPlay'         => sub { 
+						my ( $client, $item ) = @_;
+						
+						my $scripts = $prefs->client($client)->get('script');
+						$scripts->[ $selection  ] = $item  eq '(server)' ? '' : $item ;
+						$prefs->client($client)->set('script', $scripts);
+						$client->update();
+						
+						return unless $scripts->[ $selection  ];
+						
+						if (my $runScript = catfile(scriptPath(),$item)) {
+							$log->info("Execute: path: ".scriptPath());
+							$log->info("Execute: file: ".$runScript);
+							$log->info("Execute: Executing: ".$runScript);
+							$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript],'duration'=>2});
+							if (Slim::Utils::OSDetect::OS ne 'win') { $runScript =~ s/ /\\ /g };
+							system $runScript;
+						}
+			},
+			'valueRef'       => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
+			'initialValue'   => sub { my $scripts = $prefs->client($_[0])->get('script'); return $scripts->[ $selection ] || '(server)'  },
+		);
+	
+		my %scripts = scriptlist();
+		$params{'listRef'} = ['(server)',keys %scripts];
+		
+		Slim::Buttons::Common::pushModeLeft($client, 'INPUT.Choice',\%params);
+	}
 }
-
 
 sub getFunctions {
 	return \%functions;
@@ -227,7 +214,7 @@ sub doThisScript {
 		$log->info("Execute: Executing $runScriptPath");
 		$client->showBriefly({'line'=>[string('PLUGIN_EXECUTE_GO'),$runScript]});
 		if (Slim::Utils::OSDetect::OS ne 'win') { $runScriptPath =~ s/ /\\ /g;
-		system $runScriptPath; } else {system '$runScriptPath';}
+		system $runScriptPath; } else {system "$runScriptPath";}
 	} else {
 		$log->warn("Execute: No Script Selected");
 	}

@@ -1,20 +1,20 @@
 [% PROCESS settings/header.html %]
 [% IF prefs %]
-	<div class="settingSection">
-		<div class="groupHead">[% "PLUGIN_EXECUTE_SCRIPT" | string | upper %]</div>
+	[% WRAPPER settingSection %]
+		[% WRAPPER settingGroup title="PLUGIN_EXECUTE_SCRIPT" %]
 		<div class="groupDesc">[% "PLUGIN_GROUP_EXECUTE_DESC" | string %]</div>
 		<div class="groupDesc">[% "PLUGIN_EXECUTE_PLAYERSETUP_DESC" | string %]</div>
 		
 		[% IF scriptPath %]
 		<div class="groupDesc">[% "PLUGIN_EXECUTE_SCRIPTPATH" | string %][% scriptPath %]</div>
 		[% END %]
-	</div>
+	[% END %]
+	[% END %]
 	
-	[% FOREACH thispref = prefs %]
-		<div class="settingSection">
-			[% head = thispref.key; desc = thispref.key _ "_DESC" %]
-			<div class="prefHead">[% "SETUP_PLUGIN-EXECUTE-$head" | string | upper %]</div>
-			<div class="prefDesc">[% "SETUP_PLUGIN-EXECUTE-$desc" | string %]</div>
+	[%- FOREACH thispref = prefs -%]
+	[%- NEXT IF NOT thispref.key.match('pref_') -%]
+	[% WRAPPER settingSection %]
+		[% WRAPPER settingGroup title="SETUP_PLUGIN-EXECUTE-" _ thispref.key desc="SETUP_PLUGIN-EXECUTE-" _ thispref.key _ "_DESC" %]
 			
 			<select class="stdedit" name="[% thispref.key %]" id="[% thispref.key %]">
 	
@@ -23,7 +23,8 @@
 			[%- END -%]
 			
 			</select>
-		</div>
-	[% END %]
+		[% END %]
+		[%- END %]
+	[%- END %]
 [% END %]
 [% PROCESS settings/footer.html %]
