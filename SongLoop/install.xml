@@ -10,7 +10,7 @@
   <module>Plugins::SongLoop::Plugin</module>
   <targetApplication>
     <id>SlimServer</id>
-    <maxVersion>7.2</maxVersion>
+    <maxVersion>*</maxVersion>
     <minVersion>7.0a</minVersion>
   </targetApplication>
   <type>2</type>
