@@ -547,11 +547,13 @@ sub initPlugin {
 }
 
 sub setTimer {
+	my $client = shift;
+	
 	# dont' have more than one.
-	Slim::Utils::Timers::killTimers(0, \&checkAlarms);
+	Slim::Utils::Timers::killTimers($client, \&checkAlarms);
 	
 	#timer to check alarms on an interval
-	Slim::Utils::Timers::setTimer(0, Time::HiRes::time() + ($interval || 1), \&checkAlarms);
+	Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + ($interval || 1), \&checkAlarms);
 }
 
 sub clientConnectCallback {
@@ -629,15 +631,36 @@ sub fill24HScheduler {
 			$log->info(sub {return $alrmclient->name." - ".Data::Dump::dump($schedule{$alrmclient})}) if $schedule{$alrmclient};
 		}
 	}
+}
 
+sub getFuzzyTimeF {
+	my ($client, $time, $format) = @_;
+	
+	if( Slim::Utils::PluginManager->isEnabled('Plugins::FuzzyTime::Plugin')) {
+		return Plugins::FuzzyTime::Public::timeF($client,$time,$format);
+	}
+	
+	return Slim::Utils::DateTime::timeF($time,$format);
+}
+
+sub getFuzzyTime {
+	my ($client, $time, $format) = @_;
+	
+	if( Slim::Utils::PluginManager->isEnabled('Plugins::FuzzyTime::Plugin')) {
+		return int(Plugins::FuzzyTime::Public::getClientTime($client));
+	}
+	
+	return time();
 }
 
 sub checkAlarms {
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	my $client = shift;
+	
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(&getFuzzyTime($client));
 	my $time = $hour * 60 * 60 + $min * 60;
 	
 	# fill the scheduler is it's empty or it's midnight.
-	if (($time < 3600 && defined $lastfillDay && $lastFillDay != $wday )) {
+	if (($time < 3600 && defined $lastFillDay && $lastFillDay != $wday )) {
 		$log->info("repopulating 24 hour schedule.\n");
 		fill24HScheduler();
 		$lastFillDay = $wday;
@@ -692,7 +715,7 @@ sub checkAlarms {
 			}
 		}
 	}
-	setTimer();
+	setTimer($client);
 }
 
 sub findNextAlarm {
@@ -847,7 +870,7 @@ sub alarmActiveLines {
 	
 	if ($prefs->client($client)->get('showclock.'.$alarmID) && $client->display->isa('Slim::Display::Transporter')) {
 		$parts->{'screen2'} = {
-			'center' => [ '',Slim::Utils::DateTime::timeF(undef,Slim::Utils::Prefs::get('screensaverTimeFormat')) ],
+			'center' => [ '',getFuzzyTimeF($client,undef,Slim::Utils::Prefs::get('screensaverTimeFormat')) ],
 			'fonts'  => { 
 					'graphic-320x32' => 'full',
 					'graphic-280x16' => 'large',
@@ -1092,7 +1115,7 @@ sub setScreensaverAlarmTimeMode {
 sub screensaverAlarmTimelines {
 	my $client = shift;
 
-	my @line = (Slim::Utils::DateTime::longDateF(), Slim::Utils::DateTime::timeF());
+	my @line = (Slim::Utils::DateTime::longDateF(), getFuzzyTimeF());
 	
 	my $alarmID = defined $nextAlarm{$client} ? $nextAlarm{$client} : findNextAlarm($client);
 	
