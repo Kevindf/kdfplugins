@@ -126,9 +126,9 @@ sub overlayAlarmsFunc {
 
 sub addCustomPlaylist {
 	my $class        = shift;
-	my $name         = shift;
-	my $callback     = shift;
-	my $callbackargs = shift;
+	my $name         = shift; # friendly name for playlist title
+	my $callback     = shift; # function to call when the playlist is used for the alarm
+	my $callbackargs = shift; # any extra args (beyond the $client) required for the callback
 
 	$customPlaylists{$name} = $callback;
 }
@@ -1069,11 +1069,11 @@ sub playlists {
 	}
 
 	for my $key (keys %Slim::Buttons::AlarmClock::specialPlaylists) {
-		$playlists->{$key} = string($key);
+		$playlists->{$key} = $key;
 	}
 
 	for my $key (keys %customPlaylists) {
-		$playlists->{$key} = string($key);
+		$playlists->{$key} = $key;
 	}
 	
 	return $playlists;
