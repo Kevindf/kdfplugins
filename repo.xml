@@ -1,6 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
+
 <extensions>
+
   <plugins>
+
 	<plugin name="ExecuteScript" version="r51" minTarget="7.0" maxTarget="7.3">
 	  <title lang="EN">Execute Script</title>
 	  <desc lang="EN">Execute system scripts from player interface and on events</desc>
@@ -28,5 +31,7 @@
 	  <url>http://kdfplugins.googlecode.com/files/Plugins-SongLoop-Plugin.zip</url>
 	  <sha>65b719780f45ab06884b255dd6b4fb00bf3a0905</sha>
 	</plugin>
+
   </plugins>
-</extensions>
+
+</extensions
