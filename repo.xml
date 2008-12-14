@@ -20,11 +20,11 @@
 	  <sha>f7c64233ad936db5960528dfd2cf3e4d1120297c</sha>
 	</plugin>
 
-	<plugin name="Bookmarks" version="r58" minTarget="7.0" maxTarget="7.4">
-	  <title lang="EN">Bookmarks</title>
+	<plugin name="Bookmarks" version="r63" minTarget="7.0" maxTarget="7.4">
+	  <title lang="EN">Bookmark</title>
 	  <desc lang="EN">Store up to 10 bookmarks within tracks for later recall</desc>
-	  <url>http://kdfplugins.googlecode.com/files/Bookmark-2.0_r58.zip</url>
-	  <sha>ce5d9b83cf599adc555ded889c113d2c541c5bb7</sha>
+	  <url>http://kdfplugins.googlecode.com/files/Bookmark-2.0_r63.zip</url>
+	  <sha>1e708da3730361e2659604dc27337a5505da2ff4</sha>
 	</plugin>
 
 	<plugin name="SongLoop" version="r20" minTarget="7.0" maxTarget="7.3">
