@@ -13,14 +13,14 @@
 	  <sha>ad07371d49f9c0280516652094f1c778fcdce6b0</sha>
 	</plugin>
 
-	<plugin name="EmailChecker" version="r43" minTarget="7.0" maxTarget="7.4">
+	<plugin name="Email" version="r43" minTarget="7.0" maxTarget="7.4">
 	  <title lang="EN">Pop3 Email Checker</title>
 	  <desc lang="EN">Check POP3 Email servers for new mail</desc>
 	  <url>http://kdfplugins.googlecode.com/files/Plugins-Email-Plugin_r43.zip</url>
 	  <sha>f7c64233ad936db5960528dfd2cf3e4d1120297c</sha>
 	</plugin>
 
-	<plugin name="Bookmarks" version="r63" minTarget="7.0" maxTarget="7.4">
+	<plugin name="Bookmark" version="r63" minTarget="7.0" maxTarget="7.4">
 	  <title lang="EN">Bookmark</title>
 	  <desc lang="EN">Store up to 10 bookmarks within tracks for later recall</desc>
 	  <url>http://kdfplugins.googlecode.com/files/Bookmark-2.0_r63.zip</url>
