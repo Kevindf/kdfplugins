@@ -60,7 +60,7 @@ sub saveBookmark {
 	my $pop    = shift || 0;
 	
 	my $offset = Slim::Player::Source::songTime($client);
-	my $index = Slim::Player::Source::currentSongIndex($client);
+	my $index = Slim::Player::Source::playingSongIndex($client);
 	my $playlist = string('PLUGIN_BOOKMARK')." -$num- ".$client->name();
 
 	$client->execute(['playlist', 'save', $playlist]);
@@ -135,7 +135,7 @@ sub bookmarkLoadDone {
 	my $index = $prefs->client($client)->get('bookmark2Index' . $num);
 	my $offset = $prefs->client($client)->get('bookmark2Offset' . $num);
 
-	Slim::Player::Source::jumpto($client, $index);
+	Slim::Player::Source::streamingSongIndex($client, $index, 1);
 	
 	$log->info("Bookmark: jump to song $index");
 	
