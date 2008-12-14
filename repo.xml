@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 
 <extensions>
-
+  <details>
+    <title lang="EN">KDF Plugins</title>
+  </details>
   <plugins>
 
 	<plugin name="ExecuteScript" version="r51" minTarget="7.0" maxTarget="7.4">
