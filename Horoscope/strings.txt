@@ -5,6 +5,9 @@
 PLUGIN_HOROSCOPE_MODULE_NAME
 	EN	Daily Horoscope
 
+PLUGIN_HOROSCOPE_DESC
+	EN	Daily Horoscopes from Yahoo.com
+
 PLUGIN_HOROSCOPE_UPDATING
 	EN	updating...
 
