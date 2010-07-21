@@ -24,7 +24,7 @@
 	  <title lang="EN">Bookmark</title>
 	  <desc lang="EN">Store up to 10 bookmarks within tracks for later recall</desc>
 	  <url>http://kdfplugins.googlecode.com/files/Bookmark-2.02.zip</url>
-	  <sha>e89bbadb8141e07bfcbd88d9a2c39da45cda6793</sha>
+	  <sha>87d724d790e3d460eb8fd3b6165990ba2bbaaae0</sha>
 	</plugin>
 
 	<plugin name="SongLoop" version="2.01" minTarget="7.0" maxTarget="7.6">
