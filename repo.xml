@@ -6,28 +6,28 @@
   </details>
   <plugins>
 
-	<plugin name="ExecuteScript" version="2.1" minTarget="7.0" maxTarget="7.5">
+	<plugin name="ExecuteScript" version="2.1" minTarget="7.0" maxTarget="7.6">
 	  <title lang="EN">Execute Script</title>
 	  <desc lang="EN">Execute system scripts from player interface and on events</desc>
 	  <url>http://kdfplugins.googlecode.com/files/ExecuteScript-r51.zip</url>
 	  <sha>ad07371d49f9c0280516652094f1c778fcdce6b0</sha>
 	</plugin>
 
-	<plugin name="Email" version="1.0" minTarget="7.0" maxTarget="7.5">
+	<plugin name="Email" version="1.01" minTarget="7.0" maxTarget="7.6">
 	  <title lang="EN">Pop3 Email Checker</title>
 	  <desc lang="EN">Check POP3 Email servers for new mail</desc>
 	  <url>http://kdfplugins.googlecode.com/files/Plugins-Email-Plugin_r43.zip</url>
 	  <sha>f7c64233ad936db5960528dfd2cf3e4d1120297c</sha>
 	</plugin>
 
-	<plugin name="Bookmark" version="2.01" minTarget="7.0" maxTarget="7.5">
+	<plugin name="Bookmark" version="2.02" minTarget="7.0" maxTarget="7.6">
 	  <title lang="EN">Bookmark</title>
 	  <desc lang="EN">Store up to 10 bookmarks within tracks for later recall</desc>
-	  <url>http://kdfplugins.googlecode.com/files/Bookmark-2.01.zip</url>
+	  <url>http://kdfplugins.googlecode.com/files/Bookmark-2.02.zip</url>
 	  <sha>e89bbadb8141e07bfcbd88d9a2c39da45cda6793</sha>
 	</plugin>
 
-	<plugin name="SongLoop" version="2.0" minTarget="7.0" maxTarget="7.5">
+	<plugin name="SongLoop" version="2.01" minTarget="7.0" maxTarget="7.6">
 	  <title lang="EN">Song Loop</title>
 	  <desc lang="EN">Set start and end points for looping within a track</desc>
 	  <url>http://kdfplugins.googlecode.com/files/Plugins-SongLoop-Plugin.zip</url>
